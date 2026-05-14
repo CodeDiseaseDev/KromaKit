@@ -1,0 +1,16 @@
+//
+// Created by code on 5/5/26.
+//
+
+#ifndef TEST_IOS_APP_DUIMETALRENDERBACKENDHOOKS_H
+#define TEST_IOS_APP_DUIMETALRENDERBACKENDHOOKS_H
+
+
+
+class DUIMetalRenderBackendHooks {
+
+};
+
+
+
+#endif //TEST_IOS_APP_DUIMETALRENDERBACKENDHOOKS_H

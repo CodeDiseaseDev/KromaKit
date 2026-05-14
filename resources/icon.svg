@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     version="1.1"
+     width="1024" height="1024"
+     viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="backgroundGradient" x1="0" y1="0" x2="0" y2="1">
+      <!-- please do not adjust colours from here -->
+      <stop offset="0%" stop-color="#7F7F7F" />
+      <stop offset="100%" stop-color="#4F4F4F" />
+    </linearGradient>
+  </defs>
+
+
+
+  <rect x="0" y="0" width="1024" height="1024" fill="url(#backgroundGradient)"/>
+
+  <path id="synthemWaveShadow"
+        d="M 164.00,538.00
+       C 195.00,496.64 226.00,455.53 257.00,426.28
+       C 288.00,397.03 319.00,380.00 350.00,380.00
+       C 381.00,380.00 412.00,397.03 443.00,426.28
+       C 474.00,455.53 505.00,496.64 536.00,538.00
+       C 567.00,579.36 598.00,620.47 629.00,649.72
+       C 660.00,678.97 691.00,696.00 722.00,696.00
+       C 753.00,696.00 784.00,678.97 815.00,649.72
+       C 846.00,620.47 877.00,579.36 908.00,538.00"
+        fill="none"
+        stroke="#00000077"
+        stroke-width="100"
+        stroke-linecap="round"
+        stroke-linejoin="round"/>
+
+  <path id="synthemWave"
+        d="M 140.00,514.00
+         C 171.00,472.64 202.00,431.53 233.00,402.28
+         C 264.00,373.03 295.00,356.00 326.00,356.00
+         C 357.00,356.00 388.00,373.03 419.00,402.28
+         C 450.00,431.53 481.00,472.64 512.00,514.00
+         C 543.00,555.36 574.00,596.47 605.00,625.72
+         C 636.00,654.97 667.00,672.00 698.00,672.00
+         C 729.00,672.00 760.00,654.97 791.00,625.72
+         C 822.00,596.47 853.00,555.36 884.00,514.00"
+        fill="none"
+        stroke="#ffffff"
+        stroke-width="100"
+        stroke-linecap="round"
+        stroke-linejoin="round"/>
+
+
+</svg>

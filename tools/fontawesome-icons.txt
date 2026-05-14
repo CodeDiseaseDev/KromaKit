@@ -1,0 +1,21 @@
+# Font Awesome icons to import.
+# One icon name per line, without .svg.
+# The script searches solid/regular/brands and copies matching files.
+
+play
+pause
+stop
+gear
+music
+wave-square
+folder
+file
+plus
+xmark
+chevron-left
+chevron-right
+sliders
+heart
+github
+xmark
+slash

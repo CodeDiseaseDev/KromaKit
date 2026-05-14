@@ -1,0 +1,16 @@
+//
+// Created by code on 5/5/26.
+//
+
+#ifndef TEST_IOS_APP_DUIMETALNANOVGCONTEXTOWNER_H
+#define TEST_IOS_APP_DUIMETALNANOVGCONTEXTOWNER_H
+
+
+
+class DUIMetalNanoVGContextOwner {
+
+};
+
+
+
+#endif //TEST_IOS_APP_DUIMETALNANOVGCONTEXTOWNER_H

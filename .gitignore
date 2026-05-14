@@ -1,0 +1,97 @@
+# ------------------------------------------------------------
+# KromaKit .gitignore
+# ------------------------------------------------------------
+
+# CMake build directories
+build/
+build-*/
+cmake-build-*/
+
+# Accidental in-source CMake output
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile.cmake
+CTestTestfile.cmake
+install_manifest.txt
+
+# CMake generated binaries/libraries in build roots
+*.cmake.user
+
+# Compile database
+# Keep this ignored unless you intentionally want to commit it.
+compile_commands.json
+
+# Make/build output directories
+build_linux/
+build_windows/
+build_macos/
+build_ios/
+build_tests/
+build_package/
+build_macos_package/
+full_package/
+out/
+dist/
+
+# Generated app/package/icon outputs
+*.app/
+*.ipa
+*.exe
+*.dll
+*.dylib
+*.so
+*.a
+*.lib
+*.rawexec
+*.icns
+*.ico
+
+# Object/dependency files
+*.o
+*.obj
+*.d
+*.dep
+*.lo
+*.la
+
+# Debug/log/crash output
+*.log
+backtrace.txt
+core
+core.*
+*.stackdump
+*.trace
+
+# Test binaries / local probes
+directui_tests
+kromakit_tests
+headless_label_smoke
+panel_headless_probe
+
+# Editor / IDE junk
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# CLion / JetBrains
+cmake-build-debug/
+cmake-build-release/
+cmake-build-relwithdebinfo/
+cmake-build-minsizerel/
+
+# Temporary files
+tmp/
+temp/
+.cache/
+
+# Generated icon build outputs
+# Keep source icons/resources elsewhere tracked.
+build_icons/
+
+# Python cache, for migration/helper scripts
+__pycache__/
+*.pyc

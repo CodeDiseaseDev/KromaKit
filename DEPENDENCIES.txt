@@ -1,0 +1,79 @@
+Synthem toolchain dependencies
+
+1. Installable via package managers
+
+bash
+make
+clang
+clang++
+x86_64-w64-mingw32-g++
+mingw-w64
+cmake
+glfw3 dev package
+OpenGL / Mesa dev libraries
+ALSA dev libraries
+standard POSIX/system libs: dl, pthread, m
+Windows SDK / MinGW libs: opengl32, gdi32, user32, kernel32, shell32, winmm, imm32, ole32, uuid, version, setupapi, avrt
+wine
+python3
+rsvg-convert / librsvg
+ImageMagick magick
+png2icns / icnsutils
+zip
+rsync
+OpenSSH client: ssh, scp
+lldb
+bear
+tree
+HFS tools: mkfs.hfsplus, plus dd, mount, umount, sudo
+base shell utilities: sed, awk, grep, sha256sum, cp, rm, mkdir, chmod, tail, ps, clear
+
+2. Obscure / manual / platform-specific
+
+Procursus iOS cctools toolchain
+aarch64-apple-darwin-clang++
+iPhoneOS SDK: iPhoneOS13.2.sdk
+iOS frameworks:
+  UIKit
+  Foundation
+  AVFoundation
+  AudioToolbox
+  Metal
+  MetalPerformanceShaders
+  MetalKit
+  QuartzCore
+  CoreGraphics
+
+Procursus macOS cctools toolchain
+x86_64-apple-darwin-clang
+x86_64-apple-darwin-clang++
+macOS SDK: MacOSX14.5.sdk
+macOS frameworks:
+  AppKit
+  Foundation
+  QuartzCore
+  Metal
+  MetalPerformanceShaders
+  AVFoundation
+  AudioToolbox
+
+/home/code/ldid/ldid
+Procursus ldid
+Electron rcedit-x64.exe
+macOS codesign
+macOS iconutil
+macOS hdiutil
+Font Awesome source checkout
+jailbroken iPhone target: mobile@192.168.0.133
+TrollStore install flow via uiopen apple-magnifier://install
+device-side /var/jb/var/mobile/wait_for_unlock.sh
+device-side uicache
+device-side open
+device-side /tmp/synthem.log
+device-side debugserver
+
+Vendored/local, not install deps:
+third_party/glad
+third_party/nanovg
+external/nanosvg
+custom icns generator script
