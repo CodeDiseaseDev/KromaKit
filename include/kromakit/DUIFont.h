@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <map>
+#include <utility>
 
 // #include "Control.h"
 
@@ -60,6 +61,25 @@ public:
 };
 
 class FontRegistry {
+
+	struct FontResolveResult {
+		std::string fullFontName = "default";
+		DUIFont font;
+		bool success = false;
+	};
+
+	static FontResolveResult MakeResult(
+		const DUIFont& font,
+		std::string fullFontName,
+		bool success = true) {
+
+		return {
+			.fullFontName = std::move(fullFontName),
+			.font = font,
+			.success = success
+		};
+	}
+
 public:
 	static void Register(
 		const std::string& family,
@@ -70,7 +90,9 @@ public:
 		GetMap()[{ family, weight, style }] = nanoVGName;
 	}
 
-	static std::string Resolve(const DUIFont& font) {
+
+
+	static FontResolveResult Resolve(const DUIFont& font) {
 		auto& map = GetMap();
 
 		FontFaceKey exact {
@@ -81,7 +103,7 @@ public:
 
 		auto it = map.find(exact);
 		if (it != map.end()) {
-			return it->second;
+			return MakeResult(font, it->second);
 		}
 
 		FontFaceKey regular {
@@ -92,10 +114,10 @@ public:
 
 		it = map.find(regular);
 		if (it != map.end()) {
-			return it->second;
+			return MakeResult(font, it->second);
 		}
 
-		return "default";
+		return MakeResult(font, "", false);
 	}
 
 private:

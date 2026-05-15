@@ -5,35 +5,12 @@
 #include <float.h>
 
 #include <kromakit/Control.h>
-// #include "Application.h"
-
-
-
 
 Graphics::Graphics(
 	NVGcontext* vg)
 {
 	this->_RenderTarget = vg;
-	// this->_D2D1_Factory = factory;
-	//
-	// rendTarget->CreateSolidColorBrush(
-	// 	{1,0,0,1}, &this->Brush
-	// );
-	//
-	// App::pCurrent->m_pIWICFactory->CreateFormatConverter(
-	// 	&pConverter);
-	//
-	// _RenderTarget->SetTextAntialiasMode(
-	// 	D2D1_TEXT_ANTIALIAS_MODE_GRAYSCALE);
 }
-
-// Graphics::Graphics(NVGcontext* vg)
-// {
-// 	this->_RenderTarget = vg;
-// 	this->Brush = nullptr;
-//
-// 	printf("Graphics() created without parameters\n");
-// }
 
 void Graphics::RenderShadow(
 	Color col,
@@ -86,109 +63,17 @@ void Graphics::RenderBasicShadow(DUISize size) {
 
 void Graphics::SaveDrawingState()
 {
-	// ID2D1DrawingStateBlock* stateBlock;
-	// _D2D1_Factory->CreateDrawingStateBlock(&stateBlock);
-	//
-	// if (stateBlock == nullptr)
-	// 	return nullptr;
-	//
-	// _RenderTarget->SaveDrawingState(stateBlock);
-	// return stateBlock;
-
 	nvgSave(_RenderTarget);
 }
 
 void Graphics::RestoreDrawingState()
 {
-	// if (state == nullptr)
-	// 	return;
-	//
-	// _RenderTarget->RestoreDrawingState(state);
-
 	nvgRestore(_RenderTarget);
 }
-
-// ID2D1Bitmap* Graphics::LoadBitmapFromFile(
-// 	std::wstring file_path)
-// {
-// 	IWICBitmapDecoder* pDecoder = NULL;
-//
-// 	HRESULT hr = App::pCurrent->m_pIWICFactory->CreateDecoderFromFilename(
-// 		file_path.c_str(),               // Image to be decoded
-// 		NULL,                            // Do not prefer a particular vendor
-// 		GENERIC_READ,                    // Desired read access to the file
-// 		WICDecodeMetadataCacheOnDemand,  // Cache metadata when needed
-// 		&pDecoder                        // Pointer to the decoder
-// 	);
-//
-// 	if (FAILED(hr))
-// 		return nullptr;
-//
-// 	IWICBitmapFrameDecode* pFrame = NULL;
-// 	hr = pDecoder->GetFrame(0, &pFrame);
-//
-// 	pDecoder->Release();
-//
-// 	if (FAILED(hr))
-// 		return nullptr;
-//
-// 	IWICFormatConverter* pConverter = NULL;
-// 	hr = App::pCurrent->m_pIWICFactory->CreateFormatConverter(&pConverter);
-//
-// 	if (FAILED(hr))
-// 		return nullptr;
-//
-// 	hr = pConverter->Initialize(
-// 		pFrame,
-// 		GUID_WICPixelFormat32bppPBGRA,
-// 		WICBitmapDitherTypeNone,
-// 		NULL,
-// 		0.f,
-// 		WICBitmapPaletteTypeMedianCut
-// 	);
-//
-// 	pFrame->Release();
-//
-// 	if (FAILED(hr))
-// 		return nullptr;
-//
-// 	ID2D1Bitmap* m_pD2DBitmap = nullptr;
-// 	hr = _RenderTarget->CreateBitmapFromWicBitmap(
-// 		pConverter, NULL, &m_pD2DBitmap);
-//
-// 	if (FAILED(hr))
-// 		return nullptr;
-//
-// 	pConverter->Release();
-//
-// 	return m_pD2DBitmap;
-// }
-
-// void Graphics::DrawImage(
-// 	ID2D1Bitmap* bitmap,
-// 	float x, float y,
-// 	float width, float height,
-// 	float opacity)
-// {
-// 	D2D1_SIZE_F size = bitmap->GetSize();
-//
-// 	const D2D1_RECT_F dest { x, y, width + x, height + y };
-// 	_RenderTarget->DrawBitmap(bitmap, dest, opacity);
-// }
 
 void Graphics::RotateTransformAt(
 	float rotate, float x, float y)
 {
-	// D2D1_MATRIX_3X2_F matrix =
-	// 	D2D1::Matrix3x2F::Rotation(
-	// 		rotate, { x, y });
-	//
-	// D2D1_MATRIX_3X2_F transform{};
-	// _RenderTarget->GetTransform(&transform);
-	//
-	// matrix = matrix * transform;
-	// _RenderTarget->SetTransform(matrix);
-
 	nvgTranslate(_RenderTarget, x, y);
 	nvgRotate(_RenderTarget, rotate);
 	nvgTranslate(_RenderTarget, -x, -y);
@@ -199,13 +84,6 @@ void Graphics::FillRectangle(
 	float width, float height,
 	Color fill)
 {
-	// Brush->SetColor(fill);
-	//
-	// _RenderTarget->FillRectangle(
-	// 	{x, y, x + width, y + height},
-	// 	Brush
-	// );
-
 	nvgBeginPath(_RenderTarget);
 	nvgRect(_RenderTarget, x, y, width, height);
 	nvgFillColor(_RenderTarget, fill);
@@ -217,102 +95,15 @@ void Graphics::DrawRectangle(
 	float width, float height,
 	Color color)
 {
-	// Brush->SetColor(color);
-	// auto aa_mode = _RenderTarget->GetAntialiasMode();
-	//
-	// // fix blurry edges
-	// _RenderTarget->SetAntialiasMode(D2D1_ANTIALIAS_MODE_ALIASED);
-	//
-	// _RenderTarget->DrawRectangle(
-	// 	{ x, y, x + width, y + height },
-	// 	Brush
-	// );
-	//
-	// _RenderTarget->SetAntialiasMode(aa_mode);
-
 	nvgBeginPath(_RenderTarget);
 	nvgRect(_RenderTarget, x, y, width, height);
 	nvgStrokeColor(_RenderTarget, color);
 	nvgStroke(_RenderTarget);
 }
 
-//ID2D1Bitmap* Graphics::CreateBitmapFromControl(
-//	Control* ctrl)
-//{
-//	int width = ctrl->size.width;
-//	int height = ctrl->size.height;
-//
-//	UINT stride = width * 3;
-//	size_t bufferSize = stride * height;
-//
-//	pImageBuffer = new unsigned char[bufferSize];
-//
-//	HRESULT hr = App::pCurrent->m_pIWICFactory->CreateBitmapFromMemory(
-//		width, height,
-//		GUID_WICPixelFormat24bppRGB,
-//		stride,
-//		bufferSize,
-//		pImageBuffer,
-//		&m_pEmbeddedBitmap
-//	);
-//
-//	if (FAILED(hr))
-//	{
-//		OnError(hr);
-//		return nullptr;
-//	}
-//	
-//	delete[] pImageBuffer;
-//
-//	return nullptr;
-//}
+void Graphics::RenderFailedFontResolve(float x, float y) const {
+	DrawRoundedRectangle(x, y, 200, 10, ColorFromRGB(255,255,0), 5);
 
-void Graphics::_InitText(
-	const wchar_t* text,
-	DUIFont& font)
-{
-	// HRESULT hr;
-	//
-	// if (pDWriteFactory != nullptr)
-	// 	SafeRelease(pDWriteFactory);
-	//
-	// hr = DWriteCreateFactory(
-	// 	DWRITE_FACTORY_TYPE_SHARED,
-	// 	__uuidof(pDWriteFactory),
-	// 	(IUnknown**)&pDWriteFactory
-	// );
-	//
-	// if (FAILED(hr))
-	// 	printf("DWriteCreateFactory failed\n");
-	//
-	// if (pTextFormat != nullptr)
-	// 	SafeRelease(pTextFormat);
-	//
-	// hr = pDWriteFactory->CreateTextFormat(
-	// 	font.FontName, NULL,
-	// 	font.FontWeight,
-	// 	font.FontStyle,
-	// 	font.FontStretch,
-	// 	font.FontSize,
-	// 	L"", &pTextFormat
-	// );
-	//
-	// if (FAILED(hr))
-	// 	printf("CreateTextFormat failed\n");
-	//
-	// if (pTextLayout != nullptr)
-	// 	SafeRelease(pTextLayout);
-	//
-	// hr = pDWriteFactory->CreateTextLayout(
-	// 	text, wcslen(text),
-	// 	pTextFormat, FLT_MAX, FLT_MAX,
-	// 	&pTextLayout
-	// );
-	//
-	// if (FAILED(hr))
-	// 	printf("CreateTextLayout failed\n");
-	//
-	// pTextLayout->GetMetrics(&textMetrics);
 }
 
 void Graphics::RenderText(
@@ -326,9 +117,14 @@ void Graphics::RenderText(
 		return;
 	}
 
-	std::string resolvedFontName = FontRegistry::Resolve(font);
+	auto resolvedFont = FontRegistry::Resolve(font);
 
-	float bounds[4];
+	if (!resolvedFont.success) {
+		RenderFailedFontResolve(x,y);
+		return;
+	}
+
+	std::string& resolvedFontName = resolvedFont.fullFontName;
 
 	nvgFillColor(_RenderTarget, fill);
 	nvgFontFace(_RenderTarget, resolvedFontName.c_str());
@@ -346,7 +142,14 @@ void Graphics::RenderTextBox(
 	DUIFont font, Color fill,
 	float x, float y, float width) const {
 
-	std::string resolvedFontName = FontRegistry::Resolve(font);
+	auto resolvedFont = FontRegistry::Resolve(font);
+
+	if (!resolvedFont.success) {
+		RenderFailedFontResolve(x,y);
+		return;
+	}
+
+	std::string& resolvedFontName = resolvedFont.fullFontName;
 
 	// float bounds[4];
 
@@ -361,7 +164,13 @@ void Graphics::RenderTextBox(
 DUISize Graphics::CalculateTextSize(
 	const char* text, DUIFont font)
 {
-	std::string resolvedFontName = FontRegistry::Resolve(font);
+	auto resolvedFont = FontRegistry::Resolve(font);
+
+	if (!resolvedFont.success) {
+		return {0,0};
+	}
+
+	std::string& resolvedFontName = resolvedFont.fullFontName;
 
 	nvgFontFace(_RenderTarget, resolvedFontName.c_str());
 	nvgFontSize(_RenderTarget, font.FontSize);
@@ -384,7 +193,13 @@ float Graphics::CalculateTextAdvance(
 	if (text == nullptr || text[0] == '\0')
 		return 0.0f;
 
-	std::string resolvedFontName = FontRegistry::Resolve(font);
+	auto resolvedFont = FontRegistry::Resolve(font);
+
+	if (!resolvedFont.success) {
+		return 0;
+	}
+
+	std::string& resolvedFontName = resolvedFont.fullFontName;
 	nvgFontFace(_RenderTarget, resolvedFontName.c_str());
 	nvgFontSize(_RenderTarget, font.FontSize);
 
@@ -410,7 +225,13 @@ float Graphics::CalculateTextAdvance(
 DUISize Graphics::CalculateTextBoxSize(
 	const char* text, float width, DUIFont font)
 {
-	std::string resolvedFontName = FontRegistry::Resolve(font);
+	auto resolvedFont = FontRegistry::Resolve(font);
+
+	if (!resolvedFont.success) {
+		return {0,0};
+	}
+
+	std::string& resolvedFontName = resolvedFont.fullFontName;
 
 	nvgFontFace(_RenderTarget, resolvedFontName.c_str());
 	nvgFontSize(_RenderTarget, font.FontSize);
@@ -840,7 +661,7 @@ void Graphics::DrawRoundedRectangle(
 void Graphics::DrawRoundedRectangle(
 	float x, float y,
 	float width, float height,
-	Color color, float cornerRadius)
+	Color color, float cornerRadius) const
 {
 	nvgBeginPath(_RenderTarget);
 

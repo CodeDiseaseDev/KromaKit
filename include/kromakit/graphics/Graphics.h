@@ -95,6 +95,9 @@ class Control;
 
 class Graphics
 {
+private:
+	void RenderFailedFontResolve(float x, float y) const;
+
 public:
 	float DeltaTime = 0.0f;
 	DUISize viewportSize{0,0};
@@ -107,10 +110,7 @@ public:
 
 	const float GetFPS() const { return 1.0f / DeltaTime; }
 
-	void _InitText(
-		const wchar_t* text,
-		DUIFont& font
-	);
+
 
 	Graphics(NVGcontext* rendTarget);
 
@@ -229,7 +229,7 @@ public:
 		float x, float y,
 		float width, float height,
 		Color color, float cornerRadius
-	);
+	) const;
 
 	void DrawRoundedRectangle(
 		float x, float y,
