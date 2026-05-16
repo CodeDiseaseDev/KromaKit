@@ -247,6 +247,7 @@ endif()
 
 add_library(kromakit STATIC
         ${KROMAKIT_SOURCES}
+        ${KROMAKIT_GLAD_SOURCE}
         "${CMAKE_CURRENT_SOURCE_DIR}/nanovg/nanovg.cpp"
 )
 
