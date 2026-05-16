@@ -332,6 +332,14 @@ if(KROMAKIT_PLATFORM_LINUX)
             ${FREETYPE2_INCLUDE_DIRS}
     )
 
+    if(KROMAKIT_GLAD_INCLUDE_DIR)
+        target_include_directories(kromakit PUBLIC
+                "${KROMAKIT_GLAD_INCLUDE_DIR}"
+        )
+    else()
+        message(WARNING "GLAD source/header not found; desktop OpenGL builds may fail")
+    endif()
+
     target_link_directories(kromakit PUBLIC
             ${GLFW3_LIBRARY_DIRS}
             ${FREETYPE2_LIBRARY_DIRS}
