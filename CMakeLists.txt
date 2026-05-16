@@ -222,6 +222,25 @@ if(NOT APPLE)
     list(FILTER KROMAKIT_SOURCES EXCLUDE REGEX ".*\\.mm$")
 endif()
 
+set(KROMAKIT_GLAD_SOURCE "")
+set(KROMAKIT_GLAD_INCLUDE_DIR "")
+
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/external/glad/src/glad.c")
+    set(KROMAKIT_GLAD_SOURCE
+            "${CMAKE_CURRENT_SOURCE_DIR}/external/glad/src/glad.c"
+    )
+    set(KROMAKIT_GLAD_INCLUDE_DIR
+            "${CMAKE_CURRENT_SOURCE_DIR}/external/glad/include"
+    )
+elseif(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/third_party/glad/src/glad.c")
+    set(KROMAKIT_GLAD_SOURCE
+            "${CMAKE_CURRENT_SOURCE_DIR}/third_party/glad/src/glad.c"
+    )
+    set(KROMAKIT_GLAD_INCLUDE_DIR
+            "${CMAKE_CURRENT_SOURCE_DIR}/third_party/glad/include"
+    )
+endif()
+
 # ------------------------------------------------------------
 # Library
 # ------------------------------------------------------------
