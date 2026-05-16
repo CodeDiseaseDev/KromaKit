@@ -2,7 +2,8 @@
 // Created by code on 4/26/26.
 //
 
-#import "FontLoader.h"
+//#import "FontLoader.h"
+#import <kromakit/platform/ios/FontLoader.h>
 
 #include <string>
 #include <nanovg.h>
