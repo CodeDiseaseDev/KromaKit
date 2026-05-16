@@ -1,4 +1,4 @@
-#include <kromakit/platform/linux/FontLoaderLinux.h>
+#include <../../../include/kromakit/platform/desktop/FontLoaderDesktop.h>
 
 #include <nanovg.h>
 #include <kromakit/platform/PlatformResourceLoader.h>
@@ -17,10 +17,10 @@ struct FontRegistration {
 
 } // namespace
 
-FontLoaderLinux::FontLoaderLinux(NVGcontext* context)
+FontLoaderDesktop::FontLoaderDesktop(NVGcontext* context)
   : context_(context) {}
 
-std::string FontLoaderLinux::FontFaceNameForFamily(
+std::string FontLoaderDesktop::FontFaceNameForFamily(
   const std::string& family,
   const std::string& style) const
 {
@@ -31,7 +31,7 @@ std::string FontLoaderLinux::FontFaceNameForFamily(
   return family + "-" + style;
 }
 
-std::filesystem::path FontLoaderLinux::ResolveFontPath(
+std::filesystem::path FontLoaderDesktop::ResolveFontPath(
   const std::string& directory,
   const std::string& filename) const
 {
@@ -42,7 +42,7 @@ std::filesystem::path FontLoaderLinux::ResolveFontPath(
   return std::filesystem::path(resolvedPath);
 }
 
-bool FontLoaderLinux::LoadNanoVGFontFace(
+bool FontLoaderDesktop::LoadNanoVGFontFace(
   const std::string& faceName,
   const std::string& directory,
   const std::string& filename)
@@ -74,7 +74,7 @@ bool FontLoaderLinux::LoadNanoVGFontFace(
   return true;
 }
 
-bool FontLoaderLinux::RegisterFontFamily(
+bool FontLoaderDesktop::RegisterFontFamily(
   const std::string& family,
   const std::string& style,
   FontWeight weight,
@@ -91,7 +91,7 @@ bool FontLoaderLinux::RegisterFontFamily(
   return true;
 }
 
-void FontLoaderLinux::RegisterLegacyAliases() const
+void FontLoaderDesktop::RegisterLegacyAliases() const
 {
   FontRegistry::Register(
     "default",
@@ -112,7 +112,7 @@ void FontLoaderLinux::RegisterLegacyAliases() const
     "JetBrainsMono-Regular");
 }
 
-void FontLoaderLinux::LoadBundledFonts()
+void FontLoaderDesktop::LoadBundledFonts()
 {
   const std::array<FontRegistration, 18> poppins = {{
     {"Thin", FontWeight::Thin, FontStyle::Normal, "Poppins-Thin"},

@@ -6,9 +6,9 @@
 #include <filesystem>
 #include <string>
 
-class FontLoaderLinux {
+class FontLoaderDesktop {
 public:
-  explicit FontLoaderLinux(NVGcontext* context);
+  explicit FontLoaderDesktop(NVGcontext* context);
 
   bool LoadNanoVGFontFace(
     const std::string& faceName,

@@ -9,7 +9,7 @@
 
 #include <kromakit/platform/desktop/DUIDesktopGLFWHost.h>
 #include <kromakit/platform/windows/OpenGLNanoVGContextOwner.h>
-#include <kromakit/platform/linux/FontLoaderLinux.h>
+#include <kromakit/platform/linux/FontLoaderDesktop.h>
 #include <kromakit/platform/PlatformProvider.h>
 #include <kromakit/styling/DUIDefaultStyles.h>
 
@@ -66,7 +66,7 @@ int synthem_main(int argc, char* argv[]) {
   };
 
   config.loadFonts = [](NVGcontext* ctx) {
-    FontLoaderLinux fontLoader(ctx);
+    FontLoaderDesktop fontLoader(ctx);
     fontLoader.LoadBundledFonts();
   };
 
