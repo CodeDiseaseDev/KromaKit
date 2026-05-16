@@ -264,6 +264,9 @@ elseif(KROMAKIT_PLATFORM_WINDOWS)
     target_compile_definitions(kromakit PUBLIC
             KROMAKIT_PLATFORM_WINDOWS=1
     )
+    set_target_properties(Synthem PROPERTIES
+            CXX_EXTENSIONS ON
+    )
 elseif(KROMAKIT_PLATFORM_MACOS)
     target_compile_definitions(kromakit PUBLIC
             KROMAKIT_PLATFORM_MACOS=1
