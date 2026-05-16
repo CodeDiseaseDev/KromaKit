@@ -339,6 +339,10 @@ endif()
 # Windows deps
 # ------------------------------------------------------------
 
+# ------------------------------------------------------------
+# Windows deps
+# ------------------------------------------------------------
+
 if(KROMAKIT_PLATFORM_WINDOWS)
     find_package(OpenGL REQUIRED)
     find_package(Threads REQUIRED)
@@ -355,28 +359,16 @@ if(KROMAKIT_PLATFORM_WINDOWS)
             dwmapi
     )
 
-    find_package(PkgConfig QUIET)
-
-    if(PkgConfig_FOUND)
-        pkg_check_modules(GLFW3 glfw3)
-        pkg_check_modules(FREETYPE2 freetype2)
-
-        if(GLFW3_FOUND)
-            target_include_directories(kromakit PUBLIC ${GLFW3_INCLUDE_DIRS})
-            target_link_directories(kromakit PUBLIC ${GLFW3_LIBRARY_DIRS})
-            target_link_libraries(kromakit PUBLIC ${GLFW3_LIBRARIES})
-        else()
-            message(WARNING "glfw3 not found via pkg-config")
-        endif()
-
-        if(FREETYPE2_FOUND)
-            target_include_directories(kromakit PUBLIC ${FREETYPE2_INCLUDE_DIRS})
-            target_link_directories(kromakit PUBLIC ${FREETYPE2_LIBRARY_DIRS})
-            target_link_libraries(kromakit PUBLIC ${FREETYPE2_LIBRARIES})
-        else()
-            message(WARNING "freetype2 not found via pkg-config")
-        endif()
-    endif()
+    # Important:
+    # Do not use host pkg-config here during MinGW cross builds.
+    # It can inject Linux include paths like /usr/include into the Windows build.
+    #
+    # GLFW/Freetype for Windows should be added later via:
+    # - a MinGW toolchain file
+    # - imported library targets
+    # - FetchContent
+    # - vendored/prebuilt MinGW libraries
+    # - or PKG_CONFIG_LIBDIR pointing only at MinGW .pc files
 endif()
 
 # ------------------------------------------------------------
