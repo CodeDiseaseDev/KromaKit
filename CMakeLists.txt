@@ -222,23 +222,48 @@ if(NOT APPLE)
     list(FILTER KROMAKIT_SOURCES EXCLUDE REGEX ".*\\.mm$")
 endif()
 
+# ------------------------------------------------------------
+# GLAD
+# ------------------------------------------------------------
+
 set(KROMAKIT_GLAD_SOURCE "")
 set(KROMAKIT_GLAD_INCLUDE_DIR "")
 
-if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/external/glad/src/glad.c")
-    set(KROMAKIT_GLAD_SOURCE
-            "${CMAKE_CURRENT_SOURCE_DIR}/external/glad/src/glad.c"
-    )
-    set(KROMAKIT_GLAD_INCLUDE_DIR
-            "${CMAKE_CURRENT_SOURCE_DIR}/external/glad/include"
-    )
-elseif(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/third_party/glad/src/glad.c")
-    set(KROMAKIT_GLAD_SOURCE
-            "${CMAKE_CURRENT_SOURCE_DIR}/third_party/glad/src/glad.c"
-    )
-    set(KROMAKIT_GLAD_INCLUDE_DIR
-            "${CMAKE_CURRENT_SOURCE_DIR}/third_party/glad/include"
-    )
+if(KROMAKIT_PLATFORM_LINUX OR KROMAKIT_PLATFORM_WINDOWS)
+    if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/external/glad/src/glad.c")
+        set(KROMAKIT_GLAD_SOURCE
+                "${CMAKE_CURRENT_SOURCE_DIR}/external/glad/src/glad.c"
+        )
+        set(KROMAKIT_GLAD_INCLUDE_DIR
+                "${CMAKE_CURRENT_SOURCE_DIR}/external/glad/include"
+        )
+    elseif(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/external/glad/src/gl.c")
+        set(KROMAKIT_GLAD_SOURCE
+                "${CMAKE_CURRENT_SOURCE_DIR}/external/glad/src/gl.c"
+        )
+        set(KROMAKIT_GLAD_INCLUDE_DIR
+                "${CMAKE_CURRENT_SOURCE_DIR}/external/glad/include"
+        )
+    elseif(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/third_party/glad/src/glad.c")
+        set(KROMAKIT_GLAD_SOURCE
+                "${CMAKE_CURRENT_SOURCE_DIR}/third_party/glad/src/glad.c"
+        )
+        set(KROMAKIT_GLAD_INCLUDE_DIR
+                "${CMAKE_CURRENT_SOURCE_DIR}/third_party/glad/include"
+        )
+    elseif(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/third_party/glad/src/gl.c")
+        set(KROMAKIT_GLAD_SOURCE
+                "${CMAKE_CURRENT_SOURCE_DIR}/third_party/glad/src/gl.c"
+        )
+        set(KROMAKIT_GLAD_INCLUDE_DIR
+                "${CMAKE_CURRENT_SOURCE_DIR}/third_party/glad/include"
+        )
+    else()
+        message(FATAL_ERROR "Desktop OpenGL build requires GLAD, but no GLAD source file was found")
+    endif()
+
+    message(STATUS "KromaKit GLAD source: ${KROMAKIT_GLAD_SOURCE}")
+    message(STATUS "KromaKit GLAD include: ${KROMAKIT_GLAD_INCLUDE_DIR}")
 endif()
 
 # ------------------------------------------------------------
