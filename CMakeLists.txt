@@ -186,6 +186,7 @@ list(FILTER KROMAKIT_SOURCES EXCLUDE REGEX ".*/platform/windows/.*")
 list(FILTER KROMAKIT_SOURCES EXCLUDE REGEX ".*/platform/apple/.*")
 list(FILTER KROMAKIT_SOURCES EXCLUDE REGEX ".*/platform/ios/.*")
 list(FILTER KROMAKIT_SOURCES EXCLUDE REGEX ".*/platform/macos/.*")
+list(FILTER KROMAKIT_SOURCES EXCLUDE REGEX ".*/platform/desktop/.*")
 
 set(KROMAKIT_PLATFORM_SOURCES "")
 
@@ -212,6 +213,17 @@ elseif(KROMAKIT_PLATFORM_IOS)
             "${CMAKE_CURRENT_SOURCE_DIR}/src/platform/apple/*.mm"
             "${CMAKE_CURRENT_SOURCE_DIR}/src/platform/ios/*.cpp"
             "${CMAKE_CURRENT_SOURCE_DIR}/src/platform/ios/*.mm"
+    )
+endif()
+
+if(KROMAKIT_PLATFORM_LINUX OR KROMAKIT_PLATFORM_WINDOWS)
+    file(GLOB_RECURSE KROMAKIT_DESKTOP_PLATFORM_SOURCES CONFIGURE_DEPENDS
+            "${CMAKE_CURRENT_SOURCE_DIR}/src/platform/desktop/*.cpp"
+            "${CMAKE_CURRENT_SOURCE_DIR}/src/platform/desktop/*.c"
+    )
+
+    list(APPEND KROMAKIT_PLATFORM_SOURCES
+            ${KROMAKIT_DESKTOP_PLATFORM_SOURCES}
     )
 endif()
 
