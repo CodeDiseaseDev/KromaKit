@@ -534,3 +534,14 @@ if(KROMAKIT_BUILD_EXAMPLES)
         message(WARNING "KROMAKIT_BUILD_EXAMPLES is ON, but no demo entrypoint exists for this platform")
     endif()
 endif()
+
+# ------------------------------------------------------------
+# Objective-C ARC
+# ------------------------------------------------------------
+
+if(KROMAKIT_PLATFORM_IOS OR KROMAKIT_PLATFORM_MACOS)
+    target_compile_options(kromakit PRIVATE
+            "$<$<COMPILE_LANGUAGE:OBJC>:-fobjc-arc>"
+            "$<$<COMPILE_LANGUAGE:OBJCXX>:-fobjc-arc>"
+    )
+endif()
