@@ -19,7 +19,7 @@
 
 #include <kromakit/Utils.h>
 #include <kromakit/styling/DUIDefaultStyles.h>
-#include <kromakit/platform/ios/MetalNanoVGContextOwner.h>
+#include <kromakit/platform/apple/MetalNanoVGContextOwner.h>
 
 #include <kromakit/TextInputBridge.h>
 

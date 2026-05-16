@@ -1,4 +1,4 @@
-#include <kromakit/platform/ios/MetalNanoVGContextOwner.h>
+#include <kromakit/platform/apple/MetalNanoVGContextOwner.h>
 
 #include <nanovg_mtl.h>
 
