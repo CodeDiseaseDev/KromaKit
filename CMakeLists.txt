@@ -226,15 +226,18 @@ endif()
 # GLAD
 # ------------------------------------------------------------
 
-set(KROMAKIT_GLAD_INCLUDE_DIR
-        "${CMAKE_CURRENT_SOURCE_DIR}/third_party/glad/include"
-)
-
-set(KROMAKIT_GLAD_SOURCE
-        "${CMAKE_CURRENT_SOURCE_DIR}/third_party/glad/src/gl.c"
-)
+set(KROMAKIT_GLAD_INCLUDE_DIR "")
+set(KROMAKIT_GLAD_SOURCE "")
 
 if(KROMAKIT_PLATFORM_LINUX OR KROMAKIT_PLATFORM_WINDOWS)
+    set(KROMAKIT_GLAD_INCLUDE_DIR
+            "${CMAKE_CURRENT_SOURCE_DIR}/third_party/glad/include"
+    )
+
+    set(KROMAKIT_GLAD_SOURCE
+            "${CMAKE_CURRENT_SOURCE_DIR}/third_party/glad/src/gl.c"
+    )
+
     if(NOT EXISTS "${KROMAKIT_GLAD_INCLUDE_DIR}/glad/glad.h")
         message(FATAL_ERROR "Missing GLAD header: ${KROMAKIT_GLAD_INCLUDE_DIR}/glad/glad.h")
     endif()
@@ -245,8 +248,6 @@ if(KROMAKIT_PLATFORM_LINUX OR KROMAKIT_PLATFORM_WINDOWS)
 
     message(STATUS "KromaKit GLAD include: ${KROMAKIT_GLAD_INCLUDE_DIR}")
     message(STATUS "KromaKit GLAD source: ${KROMAKIT_GLAD_SOURCE}")
-else()
-    set(KROMAKIT_GLAD_SOURCE "")
 endif()
 
 # ------------------------------------------------------------
@@ -272,6 +273,12 @@ target_include_directories(kromakit
         "${CMAKE_CURRENT_SOURCE_DIR}/src"
         "${CMAKE_CURRENT_SOURCE_DIR}/external/nanosvg/src"
 )
+
+if(KROMAKIT_GLAD_INCLUDE_DIR)
+    target_include_directories(kromakit BEFORE PUBLIC
+            "${KROMAKIT_GLAD_INCLUDE_DIR}"
+    )
+endif()
 
 set_target_properties(kromakit PROPERTIES
         OUTPUT_NAME "kromakit"
@@ -340,14 +347,6 @@ if(KROMAKIT_PLATFORM_LINUX)
             ${FREETYPE2_INCLUDE_DIRS}
     )
 
-    if(KROMAKIT_GLAD_INCLUDE_DIR)
-        target_include_directories(kromakit PUBLIC
-                "${KROMAKIT_GLAD_INCLUDE_DIR}"
-        )
-    else()
-        message(WARNING "GLAD source/header not found; desktop OpenGL builds may fail")
-    endif()
-
     target_link_directories(kromakit PUBLIC
             ${GLFW3_LIBRARY_DIRS}
             ${FREETYPE2_LIBRARY_DIRS}
@@ -375,18 +374,13 @@ endif()
 # Windows deps
 # ------------------------------------------------------------
 
-# ------------------------------------------------------------
-# Windows deps
-# ------------------------------------------------------------
-
 if(KROMAKIT_PLATFORM_WINDOWS)
-    find_package(OpenGL REQUIRED)
     find_package(Threads REQUIRED)
 
     target_link_libraries(kromakit PUBLIC
-            OpenGL::GL
             Threads::Threads
 
+            opengl32
             gdi32
             user32
             shell32
@@ -395,16 +389,8 @@ if(KROMAKIT_PLATFORM_WINDOWS)
             dwmapi
     )
 
-    # Important:
     # Do not use host pkg-config here during MinGW cross builds.
-    # It can inject Linux include paths like /usr/include into the Windows build.
-    #
-    # GLFW/Freetype for Windows should be added later via:
-    # - a MinGW toolchain file
-    # - imported library targets
-    # - FetchContent
-    # - vendored/prebuilt MinGW libraries
-    # - or PKG_CONFIG_LIBDIR pointing only at MinGW .pc files
+    # Do not use find_package(OpenGL) here either, because it can find host OpenGL.
 endif()
 
 # ------------------------------------------------------------
