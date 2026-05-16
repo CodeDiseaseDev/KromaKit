@@ -427,13 +427,13 @@ if(KROMAKIT_PLATFORM_WINDOWS)
             winmm
     )
 
-    if(MINGW)
-        target_link_options(Synthem PRIVATE
-                -static
-                -static-libgcc
-                -static-libstdc++
-        )
-    endif()
+#    if(MINGW)
+#        target_link_options(Synthem PRIVATE
+#                -static
+#                -static-libgcc
+#                -static-libstdc++
+#        )
+#    endif()
 
     # Do not use host pkg-config here during MinGW cross builds.
     # Do not use find_package(OpenGL) here either, because it can find host OpenGL.
