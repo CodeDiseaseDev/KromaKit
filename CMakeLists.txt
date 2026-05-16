@@ -374,10 +374,47 @@ endif()
 # Windows deps
 # ------------------------------------------------------------
 
+# ------------------------------------------------------------
+# Windows deps
+# ------------------------------------------------------------
+
 if(KROMAKIT_PLATFORM_WINDOWS)
     find_package(Threads REQUIRED)
 
+    find_path(GLFW3_INCLUDE_DIR
+            NAMES GLFW/glfw3.h
+            PATHS
+            "/usr/x86_64-w64-mingw32/include"
+            "${CMAKE_FIND_ROOT_PATH}/include"
+            NO_DEFAULT_PATH
+    )
+
+    find_library(GLFW3_LIBRARY
+            NAMES glfw3 glfw
+            PATHS
+            "/usr/x86_64-w64-mingw32/lib"
+            "${CMAKE_FIND_ROOT_PATH}/lib"
+            NO_DEFAULT_PATH
+    )
+
+    if(NOT GLFW3_INCLUDE_DIR)
+        message(FATAL_ERROR "Missing MinGW GLFW headers. Could not find GLFW/glfw3.h")
+    endif()
+
+    if(NOT GLFW3_LIBRARY)
+        message(FATAL_ERROR "Missing MinGW GLFW library. Could not find libglfw3.a or libglfw.a")
+    endif()
+
+    message(STATUS "KromaKit Windows GLFW include: ${GLFW3_INCLUDE_DIR}")
+    message(STATUS "KromaKit Windows GLFW library: ${GLFW3_LIBRARY}")
+
+    target_include_directories(kromakit PUBLIC
+            "${GLFW3_INCLUDE_DIR}"
+    )
+
     target_link_libraries(kromakit PUBLIC
+            "${GLFW3_LIBRARY}"
+
             Threads::Threads
 
             opengl32
@@ -387,6 +424,7 @@ if(KROMAKIT_PLATFORM_WINDOWS)
             ole32
             uuid
             dwmapi
+            winmm
     )
 
     # Do not use host pkg-config here during MinGW cross builds.
