@@ -58,8 +58,6 @@ dist/
 # Debug/log/crash output
 *.log
 backtrace.txt
-core
-core.*
 *.stackdump
 *.trace
 
