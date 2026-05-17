@@ -417,25 +417,25 @@ void RenderPipeline::ExecuteOnscreenPass(
 	Graphics* graphics,
 	bool blurAvailable)
 {
-#ifndef NDEBUG
-	using Clock = std::chrono::steady_clock;
-
-	static double smoothedFps = 0.0;
-	static double smoothedFrameMs = 0.0;
-	static double smoothedRenderMs = 0.0;
-	static bool hasDebugSample = false;
-
-	constexpr double kSmoothingAmount = 0.08;
-#endif
+// #ifndef NDEBUG
+// 	using Clock = std::chrono::steady_clock;
+//
+// 	static double smoothedFps = 0.0;
+// 	static double smoothedFrameMs = 0.0;
+// 	static double smoothedRenderMs = 0.0;
+// 	static bool hasDebugSample = false;
+//
+// 	constexpr double kSmoothingAmount = 0.08;
+// #endif
 
 	DirectUIRenderBackend::BindDefaultFramebuffer();
 	BeginFrame(graphics, nvgRGBAf(0, 0, 0, 1.0f));
 
 	graphics->SetBackdropBlurSource(0, {0, 0});
 
-#ifndef NDEBUG
-	const auto renderStartTime = Clock::now();
-#endif
+// #ifndef NDEBUG
+// 	const auto renderStartTime = Clock::now();
+// #endif
 
 	RenderLayer(graphics, cache_.content);
 
@@ -449,41 +449,41 @@ void RenderPipeline::ExecuteOnscreenPass(
 	RenderLayer(graphics, cache_.overlay);
 	graphics->SetBackdropBlurSource(0, {0, 0});
 
-#ifndef NDEBUG
-	const auto renderEndTime = Clock::now();
-
-	const double renderMs =
-		std::chrono::duration<double, std::milli>(
-			renderEndTime - renderStartTime
-		).count();
-
-	const double safeDeltaTime =
-		graphics->DeltaTime > 0.0f
-		? static_cast<double>(graphics->DeltaTime)
-		: 1.0;
-
-	const double fps = 1.0 / safeDeltaTime;
-	const double frameMs = safeDeltaTime * 1000.0;
-
-	if (!hasDebugSample) {
-		smoothedFps = fps;
-		smoothedFrameMs = frameMs;
-		smoothedRenderMs = renderMs;
-		hasDebugSample = true;
-	} else {
-		smoothedFps = SmoothValue(smoothedFps, fps, kSmoothingAmount);
-		smoothedFrameMs = SmoothValue(smoothedFrameMs, frameMs, kSmoothingAmount);
-		smoothedRenderMs = SmoothValue(smoothedRenderMs, renderMs, kSmoothingAmount);
-	}
-
-	RenderDebugPerformanceText(
-		graphics,
-		window,
-		smoothedFps,
-		smoothedFrameMs,
-		smoothedRenderMs
-	);
-#endif
+// #ifndef NDEBUG
+// 	const auto renderEndTime = Clock::now();
+//
+// 	const double renderMs =
+// 		std::chrono::duration<double, std::milli>(
+// 			renderEndTime - renderStartTime
+// 		).count();
+//
+// 	const double safeDeltaTime =
+// 		graphics->DeltaTime > 0.0f
+// 		? static_cast<double>(graphics->DeltaTime)
+// 		: 1.0;
+//
+// 	const double fps = 1.0 / safeDeltaTime;
+// 	const double frameMs = safeDeltaTime * 1000.0;
+//
+// 	if (!hasDebugSample) {
+// 		smoothedFps = fps;
+// 		smoothedFrameMs = frameMs;
+// 		smoothedRenderMs = renderMs;
+// 		hasDebugSample = true;
+// 	} else {
+// 		smoothedFps = SmoothValue(smoothedFps, fps, kSmoothingAmount);
+// 		smoothedFrameMs = SmoothValue(smoothedFrameMs, frameMs, kSmoothingAmount);
+// 		smoothedRenderMs = SmoothValue(smoothedRenderMs, renderMs, kSmoothingAmount);
+// 	}
+//
+// 	RenderDebugPerformanceText(
+// 		graphics,
+// 		window,
+// 		smoothedFps,
+// 		smoothedFrameMs,
+// 		smoothedRenderMs
+// 	);
+// #endif
 
 	EndFrame(graphics);
 }
