@@ -417,7 +417,7 @@ void RenderPipeline::ExecuteOnscreenPass(
 	Graphics* graphics,
 	bool blurAvailable)
 {
-// #ifndef NDEBUG
+#ifndef NDEBUG
 	using Clock = std::chrono::steady_clock;
 
 	static double smoothedFps = 0.0;
@@ -426,16 +426,16 @@ void RenderPipeline::ExecuteOnscreenPass(
 	static bool hasDebugSample = false;
 
 	constexpr double kSmoothingAmount = 0.08;
-// #endif
+#endif
 
 	DirectUIRenderBackend::BindDefaultFramebuffer();
 	BeginFrame(graphics, nvgRGBAf(0, 0, 0, 1.0f));
 
 	graphics->SetBackdropBlurSource(0, {0, 0});
 
-// #ifndef NDEBUG
+#ifndef NDEBUG
 	const auto renderStartTime = Clock::now();
-// #endif
+#endif
 
 	RenderLayer(graphics, cache_.content);
 
@@ -449,7 +449,7 @@ void RenderPipeline::ExecuteOnscreenPass(
 	RenderLayer(graphics, cache_.overlay);
 	graphics->SetBackdropBlurSource(0, {0, 0});
 
-// #ifndef NDEBUG
+#ifndef NDEBUG
 	const auto renderEndTime = Clock::now();
 
 	const double renderMs =
@@ -483,7 +483,7 @@ void RenderPipeline::ExecuteOnscreenPass(
 		smoothedFrameMs,
 		smoothedRenderMs
 	);
-// #endif
+#endif
 
 	EndFrame(graphics);
 }
