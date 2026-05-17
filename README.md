@@ -267,7 +267,7 @@ KromaKit includes a named style registry.
 
 Styles can be registered once and applied to controls by name:
 
-```
+```cpp
 DUIStyleRegistry::Register<Button>("Button.Primary", [](Button& button) {
   button.SetCornerRadius(14);
   button.SetPadding({ 14, 8 });
@@ -388,7 +388,7 @@ The framework includes work toward:
 
 Example icon usage shape:
 
-```
+```cpp
 auto icon = std::make_unique<SvgIcon>();
 icon->SetIcon(DUIIcons::FontAwesome::Solid::Play);
 icon->SetColor(Colors::ForegroundPrimary);
@@ -615,7 +615,7 @@ A planned tool is a deterministic demo renderer for creating README animations.
 
 The idea is to define UI demos as classes:
 
-```
+```cpp
 IControlDemo
   CreateControl()
   ConfigureScene()
