@@ -68,6 +68,45 @@ The goal is to keep application UI code mostly platform-independent while still 
 
 ---
 
+## Dependency check
+#### Currently, this is Linux/Mac exclusive, please setup Windows Subsystem for Linux if you're working from a windows PC.
+
+KromaKit uses a custom **bash** helper shell for build, packaging, diagnostics, and tooling commands.
+
+To check whether your machine has the required dependencies installed, run:
+
+```
+./tools/synthemctl.sh
+```
+
+Then inside the interactive shell, run:
+
+```
+doctor
+```
+
+Example:
+
+```
+synthem ~ [ok 0s] ❯ doctor
+                       ^
+```
+
+The `doctor` command prints a full toolchain report. It checks core build tools, Linux dependencies, Windows cross-build tools, icon/packaging utilities, iOS and macOS cross-toolchains, SDK frameworks, vendored source dependencies, current build outputs, packaging hygiene, and optional deploy/debug extras.
+
+The output ends with a summary like:
+
+```
+Doctor summary
+  ✓ 81 ok   ! 5 warn   ✗ 3 fail
+```
+
+Fix any `✗ fail` entries before expecting the full project to build. Some `! warn` entries are optional depending on which platforms you are targeting. For example, missing Windows/iOS output artifacts may simply mean those targets have not been built yet.
+
+A mostly healthy setup will show green checks for tools such as `bash`, `make`, `cmake`, `clang`, `python3`, `pkg-config`, `zip`, `rsync`, platform SDK paths, framework paths, and required local resources. The doctor output is intentionally verbose so you can see exactly which dependency or path is missing instead of chasing build goblins in the dark.
+
+---
+
 ## Design Philosophy
 
 KromaKit is built around a few ideas:
