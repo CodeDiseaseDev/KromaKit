@@ -6,8 +6,7 @@ KromaKit is a retained-mode UI framework built around custom controls, flexible 
 
 It is designed for apps that want full control over their interface without dragging around a heavyweight native widget toolkit.
 
-Think: custom music tools, creative apps, inspectors, editors, embedded-style interfaces, experimental UI, and anything where “just use the platform button” is not the vibe.
-
+KromaKit is for apps that need their own interface language: music tools, editors, inspectors, creative software, embedded-style panels, and other custom UI-heavy projects.
 
 
 ## Status
