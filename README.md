@@ -8,7 +8,7 @@ It is designed for apps that want full control over their interface without drag
 
 Think: custom music tools, creative apps, inspectors, editors, embedded-style interfaces, experimental UI, and anything where “just use the platform button” is not the vibe.
 
----
+
 
 ## Status
 
@@ -27,7 +27,7 @@ Current focus areas:
 * Linux/Windows OpenGL support
 * Smooth animated interfaces
 
----
+
 
 ## Features
 
@@ -48,7 +48,7 @@ Current focus areas:
 * Platform capability abstraction
 * Debug tree and developer tooling hooks
 
----
+
 
 ## Platforms
 
@@ -66,7 +66,7 @@ Rendering backends:
 
 The goal is to keep application UI code mostly platform-independent while still allowing platform-specific polish where needed.
 
----
+
 
 ## Dependency check
 #### Currently, this is Linux/Mac exclusive, please setup Windows Subsystem for Linux if you're working from a windows PC.
@@ -105,7 +105,7 @@ Fix any `✗ fail` entries before expecting the full project to build. Some `! w
 
 A mostly healthy setup will show green checks for tools such as `bash`, `make`, `cmake`, `clang`, `python3`, `pkg-config`, `zip`, `rsync`, platform SDK paths, framework paths, and required local resources. The doctor output is intentionally verbose so you can see exactly which dependency or path is missing instead of chasing build goblins in the dark.
 
----
+
 
 ## Design Philosophy
 
@@ -131,7 +131,7 @@ The framework abstracts enough platform details to share UI code across desktop 
 
 KromaKit does not try to look like UIKit, AppKit, WinUI, GTK, or Qt. It gives you the machinery to build your own visual language.
 
----
+
 
 ## Basic Architecture
 
@@ -161,7 +161,7 @@ Application
 
 Each control is responsible for its own behavior, while the framework handles tree traversal, clipping, transforms, invalidation, and event routing.
 
----
+
 
 ## Example Control Setup
 
@@ -191,7 +191,7 @@ protected:
 
 KromaKit is intentionally code-first. There is no GUI designer. The UI tree is built directly in C++.
 
----
+
 
 ## Styling
 
@@ -222,7 +222,7 @@ Current style concepts include:
 * Semantic color tokens
 * Control-specific style hooks
 
----
+
 
 ## Layout
 
@@ -257,7 +257,7 @@ GridLayoutPanel
 
 This makes it possible to build editor-style interfaces, sidebars, toolbars, inspectors, and scrollable content areas.
 
----
+
 
 ## Overlays and Modals
 
@@ -282,7 +282,7 @@ Example use cases:
 * Inspector popups
 * Large touch-friendly parameter adjustment controls
 
----
+
 
 ## Input
 
@@ -304,7 +304,7 @@ Desktop can use mouse, keyboard, scroll wheel, and right-click context menus.
 
 Mobile can use touch, long press, haptics, keyboard-aware panels, and overlay-style interactions.
 
----
+
 
 ## SVG and Icons
 
@@ -328,7 +328,7 @@ icon->SetColor(Colors::ForegroundPrimary);
 
 The goal is to make icons lightweight, scalable, and easy to theme.
 
----
+
 
 ## Rendering
 
@@ -352,7 +352,7 @@ The rendering layer handles:
 
 Some rendering features are still being expanded, especially around advanced clipping, varied border thicknesses, rounded clipping, and composited effects.
 
----
+
 
 ## Platform Abstraction
 
@@ -393,7 +393,7 @@ Example platform concepts:
 
 This allows UI code to adapt without being completely rewritten per platform.
 
----
+
 
 ## Developer Tools
 
@@ -409,7 +409,7 @@ KromaKit includes debug and developer tooling hooks such as:
 
 These tools are still evolving, but the direction is clear: debugging a custom UI framework should not feel like reading tea leaves in a thunderstorm.
 
----
+
 
 ## Example Use Cases
 
@@ -428,7 +428,7 @@ KromaKit is a good fit for:
 
 It is probably not the best fit if you want a standard native business app with platform-default widgets.
 
----
+
 
 ## Relationship to Synthem
 
@@ -448,7 +448,7 @@ Synthem needed a UI system that could support:
 
 KromaKit exists because those requirements were too specific for a generic UI toolkit.
 
----
+
 
 ## Build Notes
 
@@ -478,7 +478,7 @@ Windows builds currently use a MinGW-style cross-build path in the SynthemKit en
 
 Apple builds use Objective-C++ platform hosts with Metal.
 
----
+
 
 ## Repository Layout
 
@@ -516,7 +516,7 @@ tests/
 
 Exact folders may change as the framework is cleaned up and separated further from SynthemKit.
 
----
+
 
 ## Roadmap
 
@@ -539,7 +539,7 @@ Possible future work:
 * Public example apps
 * More stable style/property system
 
----
+
 
 ## Demo Renderer Idea
 
@@ -571,7 +571,7 @@ That is probably unnecessary.
 
 Which is exactly why it sounds fun.
 
----
+
 
 ## License
 
@@ -586,7 +586,7 @@ Possible options:
 
 The licensing model will depend on whether KromaKit becomes a public framework, a portfolio project, or part of a future commercial product ecosystem.
 
----
+
 
 ## Contributing
 
@@ -596,7 +596,7 @@ KromaKit is still being shaped, renamed, separated, and cleaned up. Once the pub
 
 For now, expect dragons, sharp edges, and at least one file that looks like it was written during a caffeine eclipse.
 
----
+
 
 ## Why?
 
