@@ -126,7 +126,7 @@ Controls can opt into named styles instead of hardcoding every color, radius, ma
 
 The framework abstracts enough platform details to share UI code across desktop and mobile targets, while keeping rendering fast and low-level.
 
-### The app owns the vibe
+### Bring your own visual language
 
 KromaKit does not try to look like UIKit, AppKit, WinUI, GTK, or Qt. It gives you the machinery to build your own visual language.
 
@@ -148,7 +148,7 @@ Controls inherit from a base `Control` class and can implement their own layout,
 A simplified mental model:
 
 ```
-Window / Platform Host (Control)
+Window / Platform Host
   ContentStack (Control)
     Root Control (Control)
       Panel (Control)
