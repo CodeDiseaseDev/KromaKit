@@ -6,7 +6,7 @@ set -euo pipefail
 # Current compatibility layout (legacy paths in active use today).
 # These are relative to the project root and must remain stable in this phase.
 BUILD_IOS_OBJ_DIR="build"
-BUILD_IOS_PACKAGE_DIR="build_package"
+BUILD_IOS_PACKAGE_DIR="build_ios"
 BUILD_MACOS_DIR="build_macos"
 BUILD_MACOS_PACKAGE_DIR="build_macos_package"
 BUILD_LINUX_DIR="build_linux"

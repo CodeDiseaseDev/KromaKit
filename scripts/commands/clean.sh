@@ -4,12 +4,15 @@ set -euo pipefail
 clean_platform() {
   local platform="$1"
   case "$platform" in
-    ios) run make -C "$PROJECT_ROOT" clean-ios ;;
-    macos) run make -C "$PROJECT_ROOT" clean-macos ;;
-    linux) run make -C "$PROJECT_ROOT" clean-linux ;;
-    windows) run make -C "$PROJECT_ROOT" clean-windows ;;
+    ios) rm -rf build_ios ;;
+    macos) rm -rf build_macos ;;
+    linux) rm -rf build_linux ;;
+    windows) rm -rf build_windows ;;
     all)
-      run make -C "$PROJECT_ROOT" clean-linux clean-windows clean-ios clean-macos
+      rm -rf build_ios
+      rm -rf build_macos
+      rm -rf build_linux
+      rm -rf build_windows
       ;;
     *)
       die "unsupported clean platform: $platform"

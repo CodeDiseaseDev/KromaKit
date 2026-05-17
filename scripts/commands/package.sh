@@ -5,6 +5,25 @@ set -euo pipefail
 # https://github.com/electron/rcedit/releases
 WINDOWS_RCEDIT_BIN="${WINDOWS_RCEDIT_BIN:-$PROJECT_ROOT/scripts/tools/rcedit-x64.exe}"
 
+copy_matching_files_if_any() {
+  local src_dir="$1"
+  local dst_dir="$2"
+  shift 2
+
+  local pattern
+  local matches
+  shopt -s nullglob
+
+  for pattern in "$@"; do
+    matches=("$src_dir"/$pattern)
+    if ((${#matches[@]})); then
+      run cp -a "${matches[@]}" "$dst_dir/"
+    fi
+  done
+
+  shopt -u nullglob
+}
+
 sync_ios_to_full_package() {
   local dst="$BUILD_DIR_FULL_PACKAGE/build_ios"
 
@@ -40,15 +59,6 @@ embed_windows_icon() {
     die "missing rcedit: $WINDOWS_RCEDIT_BIN"
 
   run wine "$WINDOWS_RCEDIT_BIN" "$exe_path" --set-icon "$icon_path"
-
-#  if command -v "$WINDOWS_RCEDIT_BIN" >/dev/null 2>&1; then
-#    run wine "$WINDOWS_RCEDIT_BIN" "$exe_path" --set-icon "$icon_path"
-##    run rcedit "$exe_path" --set-icon "$icon_path"
-#  elif command -v wine >/dev/null 2>&1 && command -v rcedit.exe >/dev/null 2>&1; then
-#    run wine "$(command -v rcedit.exe)" "$exe_path" --set-icon "$icon_path"
-#  else
-#    log "warning: rcedit not found; skipping Windows exe icon embedding"
-#  fi
 }
 
 package_ios_native() {
@@ -69,6 +79,10 @@ package_ios_native() {
   run rsync -a --exclude='icon.png' "$RESOURCE_DIR/" "$IOS_APP_DIR/"
   run cp "$iconset_dir"/*.png "$IOS_APP_DIR/"
   generate_info_plist "$IOS_APP_DIR/Info.plist"
+
+  if [[ -d "$PROJECT_ROOT/LaunchScreen.storyboardc" ]]; then
+    run rsync -a "$PROJECT_ROOT/LaunchScreen.storyboardc" "$IOS_APP_DIR/"
+  fi
 
   run "$IOS_LDID_BIN" -S "$IOS_APP_DIR/$APP_NAME"
   run "$IOS_LDID_BIN" -S "$IOS_APP_DIR"
@@ -115,20 +129,50 @@ package_windows_native() {
     die "missing Windows build dir: $BUILD_DIR_WINDOWS (run build windows first)"
 
   local windows_package_dir="$BUILD_DIR_FULL_PACKAGE/$BUILD_WINDOWS_DIR"
+  local windows_exe="$BUILD_DIR_WINDOWS/${APP_NAME}.exe"
+
+  [[ -f "$windows_exe" ]] ||
+    die "missing Windows exe: $windows_exe (run build windows first)"
 
   run rm -rf "$windows_package_dir"
   run mkdir -p "$windows_package_dir/resources"
 
+  run cp "$windows_exe" "$windows_package_dir/${APP_NAME}.exe"
   run rsync -a --exclude='icon.png' "$RESOURCE_DIR/" "$windows_package_dir/resources/"
-  run rsync -a --exclude='obj/' "$BUILD_DIR_WINDOWS/" "$windows_package_dir/"
+
+  copy_matching_files_if_any "$BUILD_DIR_WINDOWS" "$windows_package_dir" \
+    "*.dll" "*.DLL"
 
   embed_windows_icon "$windows_package_dir/${APP_NAME}.exe"
 
   log "Windows package: $windows_package_dir"
 }
 
+package_linux_native() {
+  [[ -d "$BUILD_DIR_LINUX" ]] ||
+    die "missing Linux build dir: $BUILD_DIR_LINUX (run build linux first)"
+
+  local linux_package_dir="$BUILD_DIR_FULL_PACKAGE/$BUILD_LINUX_DIR"
+  local linux_exe="$BUILD_DIR_LINUX/$APP_NAME"
+
+  [[ -f "$linux_exe" ]] ||
+    die "missing Linux executable: $linux_exe (run build linux first)"
+
+  run rm -rf "$linux_package_dir"
+  run mkdir -p "$linux_package_dir/resources"
+
+  run cp "$linux_exe" "$linux_package_dir/$APP_NAME"
+  run chmod +x "$linux_package_dir/$APP_NAME"
+
+  run rsync -a --exclude='icon.png' "$RESOURCE_DIR/" "$linux_package_dir/resources/"
+
+  copy_matching_files_if_any "$BUILD_DIR_LINUX" "$linux_package_dir" \
+    "*.so" "*.so.*"
+
+  log "Linux package: $linux_package_dir"
+}
+
 package_all_native() {
-  local full_package_linux_dir="$BUILD_DIR_FULL_PACKAGE/$BUILD_LINUX_DIR"
   local full_package_macos_dir="$BUILD_DIR_FULL_PACKAGE/$BUILD_MACOS_DIR"
 
   package_ios_native
@@ -136,13 +180,10 @@ package_all_native() {
 
   run rm -rf "$BUILD_DIR_FULL_PACKAGE"
   run mkdir -p \
-    "$full_package_linux_dir/resources" \
     "$full_package_macos_dir" \
     "$BUILD_DIR_FULL_PACKAGE/build_ios"
 
-  run rsync -a --exclude='icon.png' "$RESOURCE_DIR/" "$full_package_linux_dir/resources/"
-  run rsync -a --exclude='obj/' "$BUILD_DIR_LINUX/" "$full_package_linux_dir/"
-
+  package_linux_native
   package_windows_native
 
   run cp -r "$MACOS_APP_PATH" "$full_package_macos_dir/${APP_NAME}.app"
@@ -180,6 +221,10 @@ cmd_package() {
     windows)
       step 1 1 "package windows"
       package_windows_native
+      ;;
+    linux)
+      step 1 1 "package linux"
+      package_linux_native
       ;;
     all)
       step 1 1 "package all"

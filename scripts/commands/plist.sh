@@ -3,6 +3,7 @@ set -euo pipefail
 
 generate_info_plist() {
   local out_plist="${1:-$IOS_APP_DIR/Info.plist}"
+  local out_storyboard="${2:-$IOS_APP_DIR/LaunchScreen.storyboard}"
   local version_json="$PROJECT_ROOT/synthem/versioning/version.json"
 
   [[ -f "$version_json" ]] || die "missing version file: $version_json"
@@ -52,8 +53,8 @@ generate_info_plist() {
   <string>${version}</string>
   <key>CFBundleVersion</key>
   <string>${build}</string>
-  <key>UILaunchScreen</key>
-  <dict/>
+  <key>UILaunchStoryboardName</key>
+  <string>LaunchScreen</string>
   <key>CADisableMinimumFrameDurationOnPhone</key>
   <true/>
   <key>CFBundleIcons</key>
@@ -71,6 +72,15 @@ generate_info_plist() {
       <false/>
     </dict>
   </dict>
+  <key>MinimumOSVersion</key>
+  <string>13.0</string>
+  <key>CFBundlePackageType</key>
+  <string>APPL</string>
+
+  <key>CFBundleSupportedPlatforms</key>
+  <array>
+    <string>iPhoneOS</string>
+  </array>
   <key>CFBundleIcons~ipad</key>
   <dict>
     <key>CFBundlePrimaryIcon</key>
@@ -91,11 +101,54 @@ generate_info_plist() {
 </plist>
 EOF
 
+#  cat > "$out_storyboard" <<EOF
+#<?xml version="1.0" encoding="UTF-8"?>
+#<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="launch">
+#    <device id="retina6_12" orientation="portrait" appearance="dark"/>
+#    <dependencies>
+#        <deployment identifier="iOS"/>
+#        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22504"/>
+#        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+#        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+#    </dependencies>
+#    <scenes>
+#        <scene sceneID="launch-scene">
+#            <objects>
+#                <viewController id="launch" sceneMemberID="viewController">
+#                    <view key="view" contentMode="scaleToFill" id="launch-view">
+#                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+#                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+#                        <subviews>
+#                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Synthem" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="title-label">
+#                                <rect key="frame" x="96" y="398" width="201" height="56"/>
+#                                <fontDescription key="fontDescription" type="boldSystem" pointSize="46"/>
+#                                <color key="textColor" red="0.94" green="0.90" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+#                                <nil key="highlightedColor"/>
+#                            </label>
+#                        </subviews>
+#                        <viewLayoutGuide key="safeArea" id="safe-area"/>
+#                        <color key="backgroundColor" red="0.05" green="0.03" blue="0.08" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+#                        <constraints>
+#                            <constraint firstItem="title-label" firstAttribute="centerX" secondItem="launch-view" secondAttribute="centerX" id="title-center-x"/>
+#                            <constraint firstItem="title-label" firstAttribute="centerY" secondItem="launch-view" secondAttribute="centerY" id="title-center-y"/>
+#                        </constraints>
+#                    </view>
+#                </viewController>
+#                <placeholder placeholderIdentifier="IBFirstResponder" id="first-responder" userLabel="First Responder" sceneMemberID="firstResponder"/>
+#            </objects>
+#            <point key="canvasLocation" x="0.0" y="0.0"/>
+#        </scene>
+#    </scenes>
+#</document>
+#EOF
+
   log "generated Info.plist: $out_plist"
+#  log "generated LaunchScreen.storyboard: $out_storyboard"
   log "version: ${app_name} ${version} (${channel}, build ${build})"
 }
 
 cmd_plist() {
   local out="${1:-$IOS_APP_DIR/Info.plist}"
-  generate_info_plist "$out"
+  local out_storyboard="${2:-$IOS_APP_DIR/LaunchScreen.storyboard}"
+  generate_info_plist "$out" "$out_storyboard"
 }

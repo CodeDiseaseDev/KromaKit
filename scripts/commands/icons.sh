@@ -28,6 +28,21 @@ _make_themed_icon_svg() {
     "$input_svg" > "$output_svg"
 }
 
+make_icon_png() {
+  local size="$1"
+  local out="$2"
+
+  run magick "$master" \
+    -resize "${size}x${size}!" \
+    -alpha on \
+    -background none \
+    -depth 8 \
+    -define png:color-type=6 \
+    -define png:bit-depth=8 \
+    -strip \
+    "$out"
+}
+
 _resolve_icon_theme() {
   local theme="$1"
 
@@ -341,16 +356,16 @@ generate_macos_icons() {
   run magick "$tile" "$mask" -alpha set -compose DstIn -composite "$tile"
   run magick -size "${canvas}x${canvas}" xc:none "$tile" -geometry "+${tile_offset}+${tile_offset}" -composite "$master"
 
-  run magick "$master" -resize 16x16 "$mac_iconset/icon_16x16.png"
-  run magick "$master" -resize 32x32 "$mac_iconset/icon_16x16@2x.png"
-  run magick "$master" -resize 32x32 "$mac_iconset/icon_32x32.png"
-  run magick "$master" -resize 64x64 "$mac_iconset/icon_32x32@2x.png"
-  run magick "$master" -resize 128x128 "$mac_iconset/icon_128x128.png"
-  run magick "$master" -resize 256x256 "$mac_iconset/icon_128x128@2x.png"
-  run magick "$master" -resize 256x256 "$mac_iconset/icon_256x256.png"
-  run magick "$master" -resize 512x512 "$mac_iconset/icon_256x256@2x.png"
-  run magick "$master" -resize 512x512 "$mac_iconset/icon_512x512.png"
-  run magick "$master" -resize 1024x1024 "$mac_iconset/icon_512x512@2x.png"
+  make_icon_png 16   "$mac_iconset/icon_16x16.png"
+  make_icon_png 32   "$mac_iconset/icon_16x16@2x.png"
+  make_icon_png 32   "$mac_iconset/icon_32x32.png"
+  make_icon_png 64   "$mac_iconset/icon_32x32@2x.png"
+  make_icon_png 128  "$mac_iconset/icon_128x128.png"
+  make_icon_png 256  "$mac_iconset/icon_128x128@2x.png"
+  make_icon_png 256  "$mac_iconset/icon_256x256.png"
+  make_icon_png 512  "$mac_iconset/icon_256x256@2x.png"
+  make_icon_png 512  "$mac_iconset/icon_512x512.png"
+  make_icon_png 1024 "$mac_iconset/icon_512x512@2x.png"
 
   run rm -f "$mac_icns"
 
@@ -359,7 +374,7 @@ generate_macos_icons() {
   [[ -f "$icns_packer" ]] || die "missing ICNS packer: $icns_packer"
   command -v python3 >/dev/null 2>&1 || die "missing required tool: python3"
 
-  run python3 "$icns_packer" "$mac_iconset" "$mac_icns"
+  run python3 "$icns_packer" --normalize "$mac_iconset" "$mac_icns"
 
   run rm -rf "$tmp_dir"
   [[ -f "$mac_icns" ]] || die "failed to create macOS icon set: $mac_icns"

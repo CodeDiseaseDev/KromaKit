@@ -11,7 +11,7 @@ from pathlib import Path
 
 DEFAULT_SOURCE_ROOT = Path("/home/code/font-awesome/svgs")
 DEFAULT_DEST_ROOT = Path("resources/icons/fontawesome")
-DEFAULT_HEADER_OUT = Path("directui/graphics/svg/FontAwesomeIcons.h")
+DEFAULT_HEADER_OUT = Path("kromakit/graphics/svg/FontAwesomeIcons.h")
 
 STYLES = {
     "solid": "Solid",

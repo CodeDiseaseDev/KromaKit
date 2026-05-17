@@ -2,6 +2,7 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+
 # shellcheck source=scripts/lib/paths.sh
 source "$SCRIPT_DIR/lib/paths.sh"
 # shellcheck source=scripts/lib/config.sh
@@ -10,6 +11,10 @@ source "$SCRIPT_DIR/lib/config.sh"
 source "$SCRIPT_DIR/lib/common.sh"
 # shellcheck source=scripts/lib/platforms.sh
 source "$SCRIPT_DIR/lib/platforms.sh"
+
+# shellcheck source=scripts/lib/terminal.sh
+source "$SCRIPT_DIR/lib/terminal.sh"
+
 # shellcheck source=scripts/commands/build.sh
 source "$SCRIPT_DIR/commands/build.sh"
 # shellcheck source=scripts/commands/icons.sh
@@ -30,6 +35,19 @@ source "$SCRIPT_DIR/commands/dev.sh"
 source "$SCRIPT_DIR/commands/release.sh"
 # shellcheck source=scripts/commands/zip.sh
 source "$SCRIPT_DIR/commands/zip.sh"
+# shellcheck source=scripts/commands/doctor.sh
+source "$SCRIPT_DIR/commands/doctor.sh"
+
+# shellcheck source=scripts/commands/inspect.sh
+source "$SCRIPT_DIR/commands/inspect.sh"
+#shellcheck source=scripts/commands/mac_codesign.sh
+source "$SCRIPT_DIR/commands/mac_codesign.sh"
+# shellcheck source=scripts/commands/apparatus.sh
+source "$SCRIPT_DIR/commands/apparatus.sh"
+
+# shellcheck source=scripts/commands/zsign.sh
+source "$SCRIPT_DIR/commands/zsign.sh"
+
 
 cd "$PROJECT_ROOT"
 
@@ -159,6 +177,26 @@ while [[ $# -gt 0 ]]; do
     -h|--help)
       COMMAND="help"
       ;;
+    --ipa)
+      shift
+      [[ $# -gt 0 ]] || die "--ipa requires a path"
+      OVERRIDE_IPA="$1"
+      ;;
+
+    --ipa=*)
+      OVERRIDE_IPA="${1#*=}"
+      ;;
+
+    --app)
+      shift
+      [[ $# -gt 0 ]] || die "--app requires a path"
+      OVERRIDE_APP="$1"
+      ;;
+
+    --app=*)
+      OVERRIDE_APP="${1#*=}"
+      ;;
+
     *)
       if [[ -z "$TARGET" ]]; then
         TARGET="$1"
@@ -178,7 +216,13 @@ export MACOS_APP_PATH MACOS_DMG_HFS_PATH MACOS_DMG_PATH MACOS_ICNS_PATH
 export RESOURCE_DIR ICON_SVG_PATH FONT_DIR
 export IOS_TOOLCHAIN_BIN MACOS_TOOLCHAIN_BIN IOS_LDID_BIN MACOS_LDID_BIN
 export SYNTHEM_MODE SYNTHEM_JOBS SYNTHEM_DO_INSTALL SYNTHEM_DO_DMG SYNTHEM_DO_CLEAN SYNTHEM_MODE_SET_BY_FLAG
-export OVERRIDE_THEME
+export OVERRIDE_THEME OVERRIDE_APP OVERRIDE_IPA
+
+COMMAND_ARGS=()
+if [[ -n "$TARGET" ]]; then
+  COMMAND_ARGS+=("$TARGET")
+fi
+COMMAND_ARGS+=("${EXTRA_ARGS[@]}")
 
 case "$COMMAND" in
   help|"")
@@ -216,6 +260,21 @@ case "$COMMAND" in
     ;;
   zip)
     cmd_zip "${TARGET:-all}" "${EXTRA_ARGS[@]}"
+    ;;
+  doctor)
+    cmd_doctor
+    ;;
+  inspect)
+    cmd_inspect "${COMMAND_ARGS[@]}"
+    ;;
+  apparatus)
+    cmd_apparatus "${COMMAND_ARGS[@]}"
+    ;;
+  codesign)
+    cmd_mac_codesign "${COMMAND_ARGS[@]}"
+    ;;
+  zsign)
+    cmd_zsign "${COMMAND_ARGS[@]}"
     ;;
   *)
     die "unknown command: $COMMAND (run './synthem.sh help')"
