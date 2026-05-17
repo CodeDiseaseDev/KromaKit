@@ -8,6 +8,9 @@ It is designed for apps that want full control over their interface without drag
 
 KromaKit is for apps that need their own interface language: music tools, editors, inspectors, creative software, embedded-style panels, and other custom UI-heavy projects.
 
+<div align="center"> <img src="https://github.com/user-attachments/assets/0a681597-8c43-4da9-909b-0a4fff0a0f17" width="220" alt="Synthem iOS interface screenshot showing the main app view" /> <img src="https://github.com/user-attachments/assets/106fec17-483b-4955-809c-f7e4eb9264eb" width="220" alt="Synthem iOS interface screenshot showing editor controls" /> <img src="https://github.com/user-attachments/assets/8b7eb87e-d948-401b-a3b1-9fb69e25872d" width="220" alt="Synthem iOS interface screenshot showing a dark themed control screen" /> <img src="https://github.com/user-attachments/assets/0d2b77bb-3073-4db6-b7f5-62572906dcb6" width="220" alt="Synthem iOS interface screenshot showing an app panel layout" /> </div> <div align="center"> <img src="https://github.com/user-attachments/assets/543f90a3-7655-4a4d-8a61-7546aa4c4114" width="220" alt="Synthem iOS interface screenshot showing a menu or overlay view" /> <img src="https://github.com/user-attachments/assets/ee9a0eec-1809-4758-b3c7-780613fd1621" width="220" alt="Synthem iOS interface screenshot showing another app screen built with KromaKit" /> </div>
+
+
 
 ## Status
 
