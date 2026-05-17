@@ -149,24 +149,24 @@ A simplified mental model:
 
 ```
 Window / Platform Host (Control)
-  Root Control (Control)
-    ContentStack (Control)
+  ContentStack (Control)
+    Root Control (Control)
       Panel (Control)
         Button (Control)
         Label (Control)
         MyControl (Control)
-        
-    OverlayStack (Control)
-      BackgroundOverlayLayer (Control)
-        PresentationHost
-          ModalPresentationSurface OR FloatingWindowSurface (IPresentationHost)
-            ModalPresentation OR FloatingWindowControl (Control)
-            
-      BackgroundOverlayLayer (Control)
-        ContextMenu (Control)
-          ContextMenuTextItem (IContextMenuItem)
-          ContextMenuSubMenuItem (IContextMenuItem)
-          ContextMenuSeparator (IContextMenuItem)
+      
+  OverlayStack (Control)
+    BackgroundOverlayLayer (Control)
+      PresentationHost
+        ModalPresentationSurface OR FloatingWindowSurface (IPresentationHost)
+          ModalPresentation OR FloatingWindowControl (Control)
+          
+    BackgroundOverlayLayer (Control)
+      ContextMenu (Control)
+        ContextMenuTextItem (IContextMenuItem)
+        ContextMenuSubMenuItem (IContextMenuItem)
+        ContextMenuSeparator (IContextMenuItem)
 ```
 
 Each control is responsible for its own behavior, while the framework handles tree traversal, clipping, transforms, invalidation, and event routing.
