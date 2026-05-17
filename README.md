@@ -71,7 +71,7 @@ The goal is to keep application UI code mostly platform-independent while still 
 
 
 ## Dependency check
-#### Currently, this is Linux/Mac exclusive, please setup Windows Subsystem for Linux if you're working from a windows PC.
+#### Currently, the helper tooling is Linux/macOS focused. If you are working from Windows, use WSL.
 
 KromaKit uses a custom **bash** helper shell for build, packaging, diagnostics, and tooling commands.
 
@@ -224,7 +224,7 @@ public:
     
     // ScrollableVStackPanel handles its own layout.
     //
-    // It's own DoLayout function is called by the framework,
+    // Its own DoLayout function is called by the framework,
     // do NOT call myPanel->DoLayout(...);
   }
   
@@ -233,7 +233,6 @@ public:
     myPanel = CreateControl<ScrollableVStackPanel>();
     
     // CreateOwnedControl creates an OWNED control, it now exists
-    // in memory, but you still need to call myPanel->AddBorrowedControl(...)
     exampleButton_1 = CreateOwnedControl<Button>("Example 1");
     exampleButton_2 = CreateOwnedControl<Button>("Example 2");
     exampleButton_3 = CreateOwnedControl<Button>("Example 3");
@@ -242,8 +241,7 @@ public:
         exampleButton_2 == nullptr ||
         exampleButton_3 == nullptr) {
     
-      // Throw an error
-      return;
+      throw std::runtime_error("Failed to create example buttons");
     }
     
     // Add the buttons to the scrollable panel's internal stack.
