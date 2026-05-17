@@ -149,14 +149,25 @@ Controls inherit from a base `Control` class and can implement their own layout,
 A simplified mental model:
 
 ```
-Application
-  Window / Platform Host
-    Root Control
-      Panel
-        Button
-        Label
-        Custom Control
-        Overlay Layer
+Window / Platform Host (Control)
+  Root Control (Control)
+    ContentStack (Control)
+      Panel (Control)
+        Button (Control)
+        Label (Control)
+        MyControl (Control)
+        
+    OverlayStack (Control)
+      BackgroundOverlayLayer (Control)
+        PresentationHost
+          ModalPresentationSurface OR FloatingWindowSurface (IPresentationHost)
+            ModalPresentation OR FloatingWindowControl (Control)
+            
+      BackgroundOverlayLayer (Control)
+        ContextMenu (Control)
+          ContextMenuTextItem (IContextMenuItem)
+          ContextMenuSubMenuItem (IContextMenuItem)
+          ContextMenuSeparator (IContextMenuItem)
 ```
 
 Each control is responsible for its own behavior, while the framework handles tree traversal, clipping, transforms, invalidation, and event routing.
@@ -167,24 +178,81 @@ Each control is responsible for its own behavior, while the framework handles tr
 
 Example shape:
 
-```
-class MyApp : public Application {
+```cpp
+#include <kromakit/scrollable_stack_panels/ScrollableVStackPanel.h>
+#include <kromakit/Button.h>
+
+class MyControl : public Control {
 protected:
-  void UserInitialise() override {
-    auto root = std::make_unique<Panel>();
+  
+  // This instance of ScrollableVStackPanel is intentionally
+  // created/owned/deleted by this class only.
+  //
+  // This functionality is defined in Control.cpp/.h
+  ScrollableVStackPanel* myPanel = nullptr;
+  
+  Button* exampleButton_1 = nullptr;
+  Button* exampleButton_2 = nullptr;
+  Button* exampleButton_3 = nullptr;
 
-    auto title = std::make_unique<Label>();
-    title->SetText("Hello from KromaKit");
-    title->UseStyle("Label.Title");
-
-    auto button = std::make_unique<Button>();
-    button->SetText("Press me");
-    button->UseStyle("Button.Primary");
-
-    root->AddChild(std::move(title));
-    root->AddChild(std::move(button));
-
-    GetWindow().SetRootControl(std::move(root));
+public:
+  std::optional<std::string> GetControlName() const override {
+    // optional control name; will display "<no name>"
+    // in some places otherwise.
+    return "MyControl";
+  }
+  
+  void OnRender(Graphics* rendTarget) override {
+    // Optional background rendering; remove if not required.
+    // rendTarget->FillControlBackground(this);
+  }
+  
+  void DoLayout(Graphics* rendTarget) override {
+    // NO rendering is done here, use rendTarget for layout
+    // calculation ONLY.
+    (void)rendTarget;
+    
+    if (myPanel == nullptr) return;
+    
+    DUISize& thisSize = size;
+    
+    // Fill control frame.
+    myPanel->SetLayoutSize(thisSize);
+    myPanel->SetLayoutLocation({0,0}); // x=0, y=0
+    
+    // ScrollableVStackPanel handles its own layout.
+    //
+    // It's own DoLayout function is called by the framework,
+    // do NOT call myPanel->DoLayout(...);
+  }
+  
+  MyControl() {
+    // **Important**
+    myPanel = CreateControl<ScrollableVStackPanel>();
+    
+    // CreateOwnedControl creates an OWNED control, it now exists
+    // in memory, but you still need to call myPanel->AddBorrowedControl(...)
+    exampleButton_1 = CreateOwnedControl<Button>("Example 1");
+    exampleButton_2 = CreateOwnedControl<Button>("Example 2");
+    exampleButton_3 = CreateOwnedControl<Button>("Example 3");
+    
+    if (exampleButton_1 == nullptr ||
+        exampleButton_2 == nullptr ||
+        exampleButton_3 == nullptr) {
+    
+      // Throw an error
+      return;
+    }
+    
+    // Add the buttons to the scrollable panel's internal stack.
+    // The buttons are owned by MyControl, but borrowed by the stack for layout/rendering.
+    myPanel->Stack().AddBorrowedControl(exampleButton_1);
+    myPanel->Stack().AddBorrowedControl(exampleButton_2);
+    myPanel->Stack().AddBorrowedControl(exampleButton_3);
+    
+    exampleButton_1->OnClick = [] { std::cout << "Hello example 1!" << std::endl; };
+    exampleButton_2->OnClick = [] { std::cout << "Hello example 2!" << std::endl; };
+    exampleButton_3->OnClick = [] { std::cout << "Hello example 3!" << std::endl; };
   }
 };
 ```
