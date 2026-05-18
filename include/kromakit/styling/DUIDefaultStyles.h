@@ -20,6 +20,8 @@
 #include <kromakit/styling/controls/FloatingWindowControlStyle.h>
 #include <kromakit/styling/controls/IconButtonStyle.h>
 
+#include "controls/MobileViewportStyle.h"
+
 namespace DUIDefaultStyles {
 
 
@@ -49,6 +51,8 @@ namespace DUIDefaultStyles {
     SurfaceBaseStyles::Register();
 
     IconButtonStyles::Register();
+
+    MobileViewportStyle::Register();
 
     Logging::Log("DUIDefaultStyles Registered.\n");
   }
