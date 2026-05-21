@@ -19,7 +19,6 @@ namespace {
   static OpenGLNanoVGContextOwner gRenderTargetOwner;
   //static AppRootControl gMainControl;
 
-
 }
 
 
@@ -54,24 +53,18 @@ int main() {
   };
 
   config.createRootControl = [](DUIWindow& window, const Platform& platform) -> Control* {
-    //gMainControl.synthemRoot->devicePlatform = platform;
-    //gMainControl.synthemRoot->devicePlatform.Print();
 
-    //if (!gMainControl.synthemRoot->UserInitialise(&window)) {
-   //   return nullptr;
-    //}
+     static ScrollableVStackPanel scrollableVStackPanel;
+     // static Button button;
+     //
+     // button.location = { 20, 20 };
+     // button.size = { 150, 30 };
+     // button.SetContent("Click Me");
 
-    static ScrollableVStackPanel scrollableVStackPanel;
-    // static Button button;
-    //
-    // button.location = { 20, 20 };
-    // button.size = { 150, 30 };
-    // button.SetContent("Click Me");
-
-    static Button* btn = scrollableVStackPanel.Stack().CreateControl<Button>("click me");
-    btn->OnClick = [] {
-      btn->SetContent("hi");
-    };
+     static Button* btn = scrollableVStackPanel.Stack().CreateControl<Button>("click me");
+     btn->OnClick = [] {
+       btn->SetContent("hi");
+     };
 
     return &scrollableVStackPanel;
   };
