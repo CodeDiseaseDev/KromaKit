@@ -110,6 +110,7 @@ public:
 
 	const float GetFPS() const { return 1.0f / DeltaTime; }
 
+	void FillPolygon(const std::vector<DUIPoint> &points, float x, float y, Color color);
 
 
 	Graphics(NVGcontext* rendTarget);
@@ -167,6 +168,7 @@ public:
 	DUISize CalculateTextBoxSize(
 		const char *text, float width, DUIFont font);
 
+	[[deprecated("This function causes a bottleneck, please don't use it...")]]
 	void RenderTextCentered(
 		const char* text,
 		DUIFont font, Color fill,

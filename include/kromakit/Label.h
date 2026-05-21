@@ -9,6 +9,7 @@ class Label :
 
 public:
 	Label();
+	Label(std::string str);
 
 
 
