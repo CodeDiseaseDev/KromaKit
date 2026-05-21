@@ -6,6 +6,34 @@
 
 #include <kromakit/Control.h>
 
+void Graphics::FillPolygon(
+	const std::vector<DUIPoint> &points,
+	float x, float y, Color color) {
+
+	if (points.size() < 2)
+	{
+		return;
+	}
+
+	nvgShapeAntiAlias(_RenderTarget, 1);
+	nvgBeginPath(_RenderTarget);
+
+	nvgMoveTo(_RenderTarget,
+		points[0].x + x,
+		points[0].y + y);
+
+	for (size_t i = 1; i < points.size(); i++)
+	{
+		const DUIPoint& thisPoint = points[i];
+		nvgLineTo(_RenderTarget, thisPoint.x + x, thisPoint.y + y);
+	}
+
+	nvgClosePath(_RenderTarget);
+
+	nvgFillColor(_RenderTarget, color);
+	nvgFill(_RenderTarget);
+}
+
 Graphics::Graphics(
 	NVGcontext* vg)
 {

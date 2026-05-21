@@ -7,6 +7,10 @@ Label::Label() {
 	UseStyle(DUIDefaultStyles::LabelStyles::Default);
 }
 
+Label::Label(std::string str) {
+	SetContent(str);
+}
+
 void Label::DoLayout(Graphics* rendTarget)
 {
 	cachedSize = rendTarget->CalculateTextSize(

@@ -16,9 +16,9 @@ public:
   std::optional<std::string> GetControlName() const override;
   const std::vector<std::string> GetDebugOverlayItems() override;
 
-    virtual bool IsDraggable() const { return false; }
-    virtual bool WantsDragCapture() const { return false; }
-    virtual bool WantsScrollCapture() const { return false; }
-    virtual bool WantsClickCapture() const { return false; }
+  virtual bool IsDraggable() const { return false; }
+  virtual bool WantsDragCapture() const { return false; }
+  virtual bool WantsScrollCapture() const { return false; }
+  virtual bool WantsClickCapture() const { return false; }
 };
 
