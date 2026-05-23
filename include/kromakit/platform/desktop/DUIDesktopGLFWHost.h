@@ -7,7 +7,7 @@
 #include <kromakit/platform/desktop/DUIDesktopGLFWHostConfig.h>
 #include <kromakit/platform/desktop/GLFWKeyboard.h>
 #include <kromakit/platform/DUIKeyboard.h>
-#include <kromakit/platform/AppHostControl.h>
+// #include <kromakit/platform/AppHostControl.h>
 
 
 class DUIDesktopGLFWHost {

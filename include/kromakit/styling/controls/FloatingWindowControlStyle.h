@@ -11,6 +11,8 @@
 
 #include <kromakit/presentation/FloatingWindowControl.h>
 
+#include <kromakit/styling/base_styles/SurfaceBaseStyles.h>
+
 namespace DUIDefaultStyles::FloatingWindowControlStyles {
   inline const DUIStyleName Default = "floatingwindowcontrol.default";
 
@@ -18,15 +20,15 @@ namespace DUIDefaultStyles::FloatingWindowControlStyles {
     DUIStyleRegistry::Register<FloatingWindowControl>(Default,
       [=](FloatingWindowControl& window) {
         window.UseStyle(SurfaceBaseStyles::NeutralSurfaces::AppBackground);
-        window.background = Alpha(window.background, 200);
+        // window.background = Alpha(window.background, 200);
         window.titlePanel->cornerRadius = window.cornerRadius =
-          DUIInsets(0, 0, 0, 0);
-        window.titlePanel->UseStyle(SurfaceBaseStyles::NeutralSurfaces::SurfaceWhiteSmoke);
-        window.windowLabel->UseStyle(ForegroundBaseStyles::OnWhite);
-        window.closeButton->SetTint(Colors::ForegroundOnWhite);
+          DUIInsets(6, 6, 0, 0);
+        window.titlePanel->UseStyle(SurfaceBaseStyles::NeutralSurfaces::RaisedPanel);
+        window.windowLabel->UseStyle(ForegroundBaseStyles::Primary);
+        window.closeButton->SetTint(Colors::PrimaryA20);
 
-        window.outlineThickness = DUIInsets(1,0.01,1,1);
-        window.outline = Colors::SurfaceA10;
+        // window.outlineThickness = DUIInsets(1,0.01,1,1);
+        // window.outline = Colors::SurfaceA10;
       });
   }
 }

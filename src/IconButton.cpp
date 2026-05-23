@@ -38,6 +38,10 @@ void IconButton::DoLayout(Graphics *renderTarget) {
   icon_->SetLayoutFrame(l, s);
 }
 
+void IconButton::SetIcon(std::string_view svg_path) {
+  icon_->LoadSVG(svg_path);
+}
+
 void IconButton::SetTint(Color color) {
   if (icon_ == nullptr) return;
   icon_->SetTint(color);

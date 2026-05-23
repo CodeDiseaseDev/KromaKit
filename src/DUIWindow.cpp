@@ -986,6 +986,10 @@ void DUIWindow::OnMouseWheel(float deltaX, float deltaY, bool isPrecise) {
     return;
   }
 
+  if (keyboard_modifier_state.shift) {
+    std::swap(deltaX, deltaY);
+  }
+
   WheelScrollEvent event = BuildWheelScrollEventForTarget(
     wheelTarget,
     deltaX,
@@ -1005,9 +1009,32 @@ void DUIWindow::OnMouseOut()
   activeMouseButton = MouseButton::None;
 }
 
+void DUIWindow::UpdateKeyboardState(const DUIKeyEvent& keyEvent) {
+  if (keyEvent.key == DUIKey::ShiftLeft ||
+      keyEvent.key == DUIKey::ShiftRight) {
+    keyboard_modifier_state.shift = keyEvent.pressed;
+  }
+
+  if (keyEvent.key == DUIKey::ControlLeft ||
+      keyEvent.key == DUIKey::ControlRight) {
+    keyboard_modifier_state.ctrl = keyEvent.pressed;
+  }
+
+  if (keyEvent.key == DUIKey::AltLeft ||
+      keyEvent.key == DUIKey::AltRight) {
+    keyboard_modifier_state.alt = keyEvent.pressed;
+  }
+
+  if (keyEvent.key == DUIKey::SuperLeft ||
+      keyEvent.key == DUIKey::SuperRight) {
+    keyboard_modifier_state.meta = keyEvent.pressed;
+  }
+}
 
 void DUIWindow::OnKeyDown(const DUIKeyEvent& keyEvent) {
   Control::OnKeyDown(keyEvent);
+
+  UpdateKeyboardState(keyEvent);
 
   if (keyEvent.ctrl || keyEvent.super) {
     if (RouteShortcut(keyEvent))
@@ -1020,6 +1047,8 @@ void DUIWindow::OnKeyDown(const DUIKeyEvent& keyEvent) {
 
 void DUIWindow::OnKeyUp(const DUIKeyEvent& keyEvent) {
   Control::OnKeyUp(keyEvent);
+
+  UpdateKeyboardState(keyEvent);
 
   if (selectedControl != nullptr)
     selectedControl->OnKeyUp(keyEvent);

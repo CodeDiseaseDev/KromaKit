@@ -8,11 +8,11 @@
 namespace DUIIcons::FontAwesome {
 
   namespace Solid {
-    inline constexpr std::string_view ChevronLeft =
-      "icons/fontawesome/solid/chevron-left.svg";
+    inline constexpr std::string_view ArrowsLeftRightToLine =
+      "icons/fontawesome/solid/arrows-left-right-to-line.svg";
 
-    inline constexpr std::string_view ChevronRight =
-      "icons/fontawesome/solid/chevron-right.svg";
+    inline constexpr std::string_view CircleExclamation =
+      "icons/fontawesome/solid/circle-exclamation.svg";
 
     inline constexpr std::string_view File =
       "icons/fontawesome/solid/file.svg";
@@ -22,9 +22,6 @@ namespace DUIIcons::FontAwesome {
 
     inline constexpr std::string_view Gear =
       "icons/fontawesome/solid/gear.svg";
-
-    inline constexpr std::string_view Heart =
-      "icons/fontawesome/solid/heart.svg";
 
     inline constexpr std::string_view Music =
       "icons/fontawesome/solid/music.svg";
@@ -47,9 +44,6 @@ namespace DUIIcons::FontAwesome {
     inline constexpr std::string_view Stop =
       "icons/fontawesome/solid/stop.svg";
 
-    inline constexpr std::string_view WaveSquare =
-      "icons/fontawesome/solid/wave-square.svg";
-
     inline constexpr std::string_view Xmark =
       "icons/fontawesome/solid/xmark.svg";
 
@@ -61,9 +55,6 @@ namespace DUIIcons::FontAwesome {
 
     inline constexpr std::string_view Folder =
       "icons/fontawesome/regular/folder.svg";
-
-    inline constexpr std::string_view Heart =
-      "icons/fontawesome/regular/heart.svg";
 
   }
 

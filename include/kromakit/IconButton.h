@@ -23,6 +23,8 @@ public:
   void OnRender(Graphics *rendTarget) override;
   void DoLayout(Graphics *renderTarget) override;
 
+  void SetIcon(std::string_view svg_path);
+
   void SetTint(Color color);
   void ClearTint();
 };

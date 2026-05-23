@@ -35,6 +35,14 @@ public:
 		Free
 	};
 
+	struct DUIModifierState {
+		bool shift = false;
+		bool ctrl = false;
+		bool alt = false;
+		bool meta = false;
+
+	} keyboard_modifier_state;
+
 	DUIInternalProperty<RenderInvalidationState, "rendInvalidation">
 		rendInvalidation = propRegistry.NewInternalProperty
 			<RenderInvalidationState, "rendInvalidation">();
@@ -238,6 +246,8 @@ public:
 	virtual void OnMouseUp() override;
 	virtual void OnMouseIn() override;
 	virtual void OnMouseOut() override;
+
+	void UpdateKeyboardState(const DUIKeyEvent &keyEvent);
 
 	virtual void OnKeyDown(const DUIKeyEvent &keyEvent) override;
 	virtual void OnKeyUp(const DUIKeyEvent &keyEvent) override;

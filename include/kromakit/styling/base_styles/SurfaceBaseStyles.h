@@ -21,7 +21,8 @@ namespace DUIDefaultStyles::SurfaceBaseStyles {
     inline const DUIStyleName PanelTranslucent = "synthem.surface.panel.translucent";
     inline const DUIStyleName RaisedPanelTranslucent = "synthem.surface.panel.raised-translucent";
 
-    inline const DUIStyleName SurfaceWhiteSmoke = "synthem.surface.solid-white";
+    inline const DUIStyleName SurfaceWhiteSmoke = "synthem.surface.smoke-white";
+    inline const DUIStyleName SurfaceWhite = "synthem.surface.solid-white";
   }
 
   namespace SemanticSurfaces {
@@ -52,7 +53,8 @@ namespace DUIDefaultStyles::SurfaceBaseStyles {
     const auto RaisedColor        = Colors::SurfaceA20;
     const auto ModalColor         = Colors::SurfaceA30;
     const auto OverlayColor       = Colors::SurfaceA40;
-    const auto WhiteSurfaceColor    = Colors::SurfaceA100;
+    const auto WhiteSmokeSurfaceColor    = Colors::SurfaceA100;
+    const auto WhiteSurfaceColor    = Colors::SurfaceA130;
 
     const auto PanelTranslucentColor   = Colors::TranslucentA10;
     const auto RaisedPanelTranslucentColor   = Colors::TranslucentA10;
@@ -83,6 +85,9 @@ namespace DUIDefaultStyles::SurfaceBaseStyles {
       [=](Control& c) { c.background = RaisedPanelTranslucentColor; });
 
     DUIStyleRegistry::Register<Control>(NeutralSurfaces::SurfaceWhiteSmoke,
+      [=](Control& c) { c.background = WhiteSmokeSurfaceColor; });
+
+    DUIStyleRegistry::Register<Control>(NeutralSurfaces::SurfaceWhite,
       [=](Control& c) { c.background = WhiteSurfaceColor; });
 
 

@@ -88,6 +88,12 @@ class GaussianBlurProvider;
 
 struct RenderItem;
 
+template <class T>
+void Wrap(T* ctrl, std::function<void(T*)> func) {
+  if (func != nullptr) {
+    func(ctrl);
+  }
+}
 
 class Control : public IPropertyListener {
 public:

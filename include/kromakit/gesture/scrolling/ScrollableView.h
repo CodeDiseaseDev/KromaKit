@@ -28,6 +28,9 @@ public:
   DUISize GetContentSize() const;
 
   void Update(float deltaTime) override;
+
+  virtual void OnScrollUpdate();
+
   void DoLayout(Graphics *renderTarget) override;
   void OnRender(Graphics *rendTarget) override;
 

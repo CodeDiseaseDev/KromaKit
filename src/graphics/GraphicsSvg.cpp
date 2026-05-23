@@ -4,6 +4,8 @@
 
 #include <kromakit/graphics/Graphics.h>
 
+#include "kromakit/Logging.h"
+
 namespace {
 
 static int ToNvgLineCap(SvgLineCap cap) {
@@ -105,8 +107,22 @@ void Graphics::RenderSVG(
         if (forFill || path.closed)
           nvgClosePath(_RenderTarget);
 
-        if (forFill && shape.fillRule == SvgFillRule::EvenOdd) {
-          nvgPathWinding(_RenderTarget, path.isHole ? NVG_HOLE : NVG_SOLID);
+        // if (forFill && shape.fillRule == SvgFillRule::EvenOdd) {
+        //   nvgPathWinding(_RenderTarget, path.isHole ? NVG_HOLE : NVG_SOLID);
+        // }
+        if (forFill) {
+          const bool shouldApplyWinding =
+            shape.fillRule == SvgFillRule::EvenOdd ||
+            path.isHole;
+
+          if (shouldApplyWinding) {
+            nvgPathWinding(
+              _RenderTarget,
+
+              // this ISN'T redundant (shouldApplyWinding does a || check not a && check)
+              path.isHole ? NVG_HOLE : NVG_SOLID
+            );
+          }
         }
       }
 

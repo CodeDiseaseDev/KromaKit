@@ -90,6 +90,7 @@ namespace DUIDefaultStyles {
     static inline const Color SurfaceA60 = ColorFromRGB(154, 154, 156);
     static inline const Color SurfaceA70 = ColorFromRGB(180, 180, 181);
     static inline const Color SurfaceA100 = ColorFromRGB(218, 218, 214);
+    static inline const Color SurfaceA130 = ColorFromRGB(255, 255, 255);
 
     // -------------------------
     // Tonal surfaces (slight red tint)

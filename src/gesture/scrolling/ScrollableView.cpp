@@ -17,6 +17,10 @@ void ScrollableView::Update(float deltaTime) {
   UpdateMomentum(deltaTime);
 }
 
+void ScrollableView::OnScrollUpdate() {
+
+}
+
 void ScrollableView::DoLayout(Graphics* g) {
   if (!content)
     return;
@@ -299,6 +303,8 @@ void ScrollableView::SetScrollOffset(DUIPoint offset) {
       -scrollOffset.y
     });
   }
+
+  OnScrollUpdate();
 
   // Scrolling is visual/geometry movement only, not a full layout request.
   MarkVisualDirty();

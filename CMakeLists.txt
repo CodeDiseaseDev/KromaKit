@@ -213,6 +213,7 @@ elseif(KROMAKIT_PLATFORM_IOS)
             "${CMAKE_CURRENT_SOURCE_DIR}/src/platform/apple/*.mm"
             "${CMAKE_CURRENT_SOURCE_DIR}/src/platform/ios/*.cpp"
             "${CMAKE_CURRENT_SOURCE_DIR}/src/platform/ios/*.mm"
+            "${CMAKE_CURRENT_SOURCE_DIR}/nanovg/*.mm"
     )
 endif()
 
@@ -484,6 +485,7 @@ if(KROMAKIT_PLATFORM_IOS)
     find_library(METAL_FRAMEWORK Metal REQUIRED)
     find_library(METALKIT_FRAMEWORK MetalKit REQUIRED)
     find_library(COREGRAPHICS_FRAMEWORK CoreGraphics REQUIRED)
+    find_library(METALPERFORMANCESHADERS_FRAMEWORK MetalPerformanceShaders REQUIRED)
 
     target_link_libraries(kromakit PUBLIC
             ${UIKIT_FRAMEWORK}
@@ -492,6 +494,7 @@ if(KROMAKIT_PLATFORM_IOS)
             ${METAL_FRAMEWORK}
             ${METALKIT_FRAMEWORK}
             ${COREGRAPHICS_FRAMEWORK}
+            ${METALPERFORMANCESHADERS_FRAMEWORK}
     )
 endif()
 

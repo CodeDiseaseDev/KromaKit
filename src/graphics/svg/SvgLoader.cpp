@@ -757,6 +757,39 @@ static int ComputeMinimumContainingCount(
   return minContaining;
 }
 
+static void ComputeFillHoles(SvgShape& shape) {
+  for (auto& path : shape.paths) {
+    path.isHole = false;
+  }
+
+  if (!shape.hasFill) {
+    return;
+  }
+
+  const size_t pathCount = shape.paths.size();
+  std::vector<std::vector<float>> flattened(pathCount);
+
+  for (size_t i = 0; i < pathCount; ++i) {
+    // SVG fill semantics implicitly close open subpaths for filling.
+    flattened[i] = FlattenSubPath(shape.paths[i], true);
+  }
+
+  for (size_t i = 0; i < pathCount; ++i) {
+    if (flattened[i].size() < 6) {
+      continue;
+    }
+
+    const int minContainingCount =
+      ComputeMinimumContainingCount(flattened[i], i, flattened);
+
+    if (minContainingCount == std::numeric_limits<int>::max()) {
+      continue;
+    }
+
+    shape.paths[i].isHole = (minContainingCount % 2) != 0;
+  }
+}
+
 static void ComputeEvenOddHoles(SvgShape& shape) {
   for (auto& path : shape.paths)
     path.isHole = false;
@@ -832,7 +865,8 @@ std::shared_ptr<SvgDocument> SvgLoader::LoadFromFile(
       outShape.paths.push_back(std::move(outPath));
     }
 
-    ComputeEvenOddHoles(outShape);
+    // ComputeEvenOddHoles(outShape);
+    ComputeFillHoles(outShape);
 
     doc->shapes.push_back(std::move(outShape));
   }
