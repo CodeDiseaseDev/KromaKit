@@ -329,6 +329,8 @@ public:
 
   std::unique_ptr<ContextMenu> CreateContextMenuFromProvider() const;
 
+  bool TryToPresentContextMenu();
+
   static void ContextMenuHapticFeedback();
 
   // ---------------------------------------------------------------------------

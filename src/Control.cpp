@@ -1181,6 +1181,15 @@ std::unique_ptr<ContextMenu> Control::CreateContextMenuFromProvider() const {
 	return provider();
 }
 
+bool Control::TryToPresentContextMenu() {
+	if (DUIWindow* wndControl = GetRootWindow()) {
+		return wndControl->TryPresentContextMenuForTarget(this);
+	}
+
+	Logging::Log("TryToPresentContextMenu failed at GetRootWindow\n");
+	return false;
+}
+
 void Control::OnMouseDrag(float deltaX, float deltaY) {}
 void Control::OnMouseMove(int x, int y) {}
 void Control::OnMouseMoveGlobal(int gx, int gy) {}

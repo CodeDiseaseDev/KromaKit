@@ -47,6 +47,8 @@ public:
 		rendInvalidation = propRegistry.NewInternalProperty
 			<RenderInvalidationState, "rendInvalidation">();
 
+
+	bool TryPresentContextMenuForTarget(Control* target);
 private:
 	void CloseWindow();
   void ResetContextMenuHoldTracking();
@@ -54,7 +56,7 @@ private:
   void CancelContextMenuHoldTracking();
   Control* SolveContextMenuTarget(Control* ctrl) const;
   void UpdateContextMenuHoldState();
-  bool TryPresentContextMenuForTarget(Control* target);
+
   void TeardownActiveHoldContextMenuPresentation();
 
 	bool LoadedWindowYet = false;
