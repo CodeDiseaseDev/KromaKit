@@ -13,11 +13,16 @@
 IContextMenuItem::IContextMenuItem() = default;
 
 void IContextMenuItem::SetLabelText(std::string str) {
+  if (label == nullptr) {
+    return;
+  }
   label->SetContent(std::move(str));
 }
 
 void IContextMenuItem::DoLayout(Graphics *renderTarget) {
-
+  if (label == nullptr) {
+    return;
+  }
   label->location = {
     LabelXSpacing,
     size.height / 2 - label->size.height / 2

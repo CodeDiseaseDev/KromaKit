@@ -466,8 +466,7 @@ void Graphics::DrawRoundedRectangleBorder(
 	nvgFill(_RenderTarget);
 }
 
-void Graphics::FillControlBackground(Control* control)
-{
+void Graphics::FillControlBackgroundAt(Control *control, DUIPoint location) {
 	if (control == nullptr) {
 		return;
 	}
@@ -487,11 +486,14 @@ void Graphics::FillControlBackground(Control* control)
 	const DUIInsets& outlineSize = control->outlineThickness;
 	const Color& outline = control->outline;
 
-	const DUIRect rect = {
+	DUIRect rect = {
 		-pad.left, -pad.top,
 		size.width +  pad.left + pad.right,
 		size.height + pad.top + pad.bottom,
 	};
+
+	rect.x += location.x;
+	rect.y += location.y;
 
 	// ✨optimisation✨
 	if (bg.a > 0.0f) {
@@ -508,6 +510,10 @@ void Graphics::FillControlBackground(Control* control)
 			rect.width, rect.height,
 			outline, cr, outlineSize);
 	}
+}
+
+void Graphics::FillControlBackground(Control* control) {
+	FillControlBackgroundAt(control, {0,0});
 }
 
 void Graphics::DrawErrorX(

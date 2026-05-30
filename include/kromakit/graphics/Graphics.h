@@ -179,6 +179,11 @@ public:
 		float x, float y, float w, float h,
 		Color color, DUIInsets radius, DUIInsets border);
 
+	void FillControlBackgroundAt(
+		Control* control,
+		DUIPoint location
+	);
+
 	void FillControlBackground(
 		Control* control
 	);

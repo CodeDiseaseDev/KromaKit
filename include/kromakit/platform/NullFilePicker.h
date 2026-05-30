@@ -1,0 +1,23 @@
+//
+// Created by code on 5/30/26.
+//
+
+#ifndef SYNTHEM_NULLFILEPICKER_H
+#define SYNTHEM_NULLFILEPICKER_H
+#include "IFilePicker.h"
+
+class NullFilePicker  : public IFilePicker {
+public:
+  void PickOpenFile(
+    std::vector<std::string> allowedExtensions,
+    std::function<void(std::optional<std::string>)> onResult
+  ) override {
+
+    if (onResult != nullptr) {
+      onResult(std::nullopt);
+    }
+
+  }
+};
+
+#endif //SYNTHEM_NULLFILEPICKER_H
