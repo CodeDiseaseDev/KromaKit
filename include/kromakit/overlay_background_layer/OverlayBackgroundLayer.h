@@ -47,8 +47,8 @@ class OverlayBackgroundLayer :
   void ResetAnimation();
 
 public:
-  // OverlayBackgroundLayer();
-  OverlayBackgroundLayer(IOverlayControl *overlayControl);
+  OverlayBackgroundLayer();
+  explicit OverlayBackgroundLayer(IOverlayControl *overlayControl);
 
   void RenderBackgroundBlur(Graphics *rendTarget, float opacity) const;
 

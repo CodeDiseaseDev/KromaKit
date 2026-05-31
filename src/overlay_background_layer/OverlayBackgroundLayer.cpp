@@ -23,6 +23,12 @@ void OverlayBackgroundLayer::ResetAnimation() {
   isClosing = false;
 }
 
+OverlayBackgroundLayer::OverlayBackgroundLayer() {
+  SetIsOpen(false);
+  ResetAnimation();
+  SetRenderLayer(RenderLayer::Overlay);
+}
+
 OverlayBackgroundLayer::OverlayBackgroundLayer(
   IOverlayControl *overlayControl) {
 

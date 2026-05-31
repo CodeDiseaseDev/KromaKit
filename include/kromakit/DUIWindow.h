@@ -13,6 +13,8 @@
 #include <kromakit/event_types/keyboard/DUITextInputEvent.h>
 #include <kromakit/overlay_background_layer/ContentStack.h>
 #include <kromakit/Rendering/render_state/RenderInvalidationState.h>
+
+#include "message_box/MessageBox.h"
 // #include "KeyboardHandler.h"
 // #include "Direct3D.h"
 
@@ -49,6 +51,8 @@ public:
 
 
 	bool TryPresentContextMenuForTarget(Control* target);
+
+
 private:
 	void CloseWindow();
   void ResetContextMenuHoldTracking();
@@ -77,6 +81,51 @@ public:
 		return contentStack;
 	}
 
+	template <typename TOverlay, typename... TArgs>
+	TOverlay* ShowOverlay(TArgs&&... args) {
+		static_assert(
+			std::is_base_of_v<IOverlayControl, TOverlay>,
+			"DUIWindow::ShowOverlay<T>() requires T to inherit IOverlayControl"
+		);
+
+		auto* backgroundLayer =
+			overlayStack->CreateOwnedControl<OverlayBackgroundLayer>();
+
+		auto* overlayControl =
+			backgroundLayer->CreateOwnedControl<TOverlay>(
+				std::forward<TArgs>(args)...
+			);
+
+		ConfigureOverlayBackgroundLayer(backgroundLayer, overlayControl);
+
+		backgroundLayer->AddOverlayControl(overlayControl);
+		backgroundLayer->Present();
+
+		MarkLayoutDirty();
+
+		return overlayControl;
+	}
+
+
+	void ConfigureOverlayBackgroundLayer(
+		OverlayBackgroundLayer *backgroundLayer,
+		IOverlayControl *overlayControl);
+
+	MessageBox* ShowMessageBox(MessageBoxOptions options);
+
+	MessageBox* ShowInfo(
+		std::string title,
+		std::string message);
+
+	MessageBox* ShowError(
+		std::string title,
+		std::string message,
+		std::string details = "");
+
+	MessageBox* ShowConfirm(
+		std::string title,
+		std::string message,
+		std::function<void(bool)> onResult);
 
 
 	// template <typename T>
