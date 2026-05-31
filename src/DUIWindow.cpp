@@ -31,6 +31,79 @@ inline void errorcb(int error, const char* desc)
   Logging::Log("GLFW error %d: %s\n", error, desc);
 }
 
+void DUIWindow::ConfigureOverlayBackgroundLayer(
+  OverlayBackgroundLayer* backgroundLayer,
+  IOverlayControl* overlayControl) {
+
+  if (backgroundLayer == nullptr ||
+      overlayControl == nullptr) {
+    return;
+  }
+
+  auto& options = backgroundLayer->GetPresentationOptions();
+
+  options.dismissOnBackgroundTap =
+    overlayControl->ShouldDismissOnBackgroundTap();
+
+  options.capturesBackdropClicks = true;
+  options.dimBackground = true;
+  options.blurBackground = false;
+  options.backdropZoomOutEffect = true;
+}
+
+MessageBox* DUIWindow::ShowMessageBox(MessageBoxOptions options) {
+  auto* backgroundLayer =
+    overlayStack->CreateOwnedControl<OverlayBackgroundLayer>();
+
+  auto* messageBox =
+    backgroundLayer->CreateOwnedControl<MessageBox>();
+
+  messageBox->SetOptions(std::move(options));
+
+  ConfigureOverlayBackgroundLayer(backgroundLayer, messageBox);
+
+  backgroundLayer->AddOverlayControl(messageBox);
+  backgroundLayer->Present();
+
+  MarkLayoutDirty();
+
+  return messageBox;
+}
+
+MessageBox* DUIWindow::ShowInfo(
+  std::string title,
+  std::string message) {
+
+  return ShowMessageBox(MessageBox::Info(
+    std::move(title),
+    std::move(message)
+  ));
+}
+
+MessageBox* DUIWindow::ShowError(
+  std::string title,
+  std::string message,
+  std::string details) {
+
+  return ShowMessageBox(MessageBox::Error(
+    std::move(title),
+    std::move(message),
+    std::move(details)
+  ));
+}
+
+MessageBox* DUIWindow::ShowConfirm(
+  std::string title,
+  std::string message,
+  std::function<void(bool)> onResult) {
+
+  return ShowMessageBox(MessageBox::Confirm(
+    std::move(title),
+    std::move(message),
+    std::move(onResult)
+  ));
+}
+
 void DUIWindow::MarkRenderTreeDirty() {
   rendInvalidation.Modify([&](RenderInvalidationState& ris) {
     ++ris.renderTreeVersion;
