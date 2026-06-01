@@ -15,6 +15,8 @@
 #include <algorithm>
 #include <cmath>
 
+#include "kromakit/platform/PlatformServices.h"
+
 // #include "GaussianBlurProvider.h"
 
 #ifndef DUI_DEBUG_VERIFY_LAYOUT_STABILITY
@@ -200,6 +202,22 @@ void Control::OnDebugOverlayRender(Graphics* rendTarget) {
 }
 
 Control::~Control() = default;
+
+void Control::ShowErrorMessageBox(
+	std::string title, std::string message) {
+
+	auto* rootWindow = GetRootWindow();
+
+	if (rootWindow == nullptr) {
+		// fallback platform messagebox
+		PlatformServices::DisplayMessageBox_(title, message);
+		Logging::Log("===error===\n  %s\n  %s\n=========\n",
+			title.c_str(), message.c_str());
+		return;
+	}
+
+	rootWindow->ShowError(title, message);
+}
 
 void Control::Update(float deltaTime) {
 	(void)deltaTime;
@@ -1186,7 +1204,10 @@ bool Control::TryToPresentContextMenu() {
 		return wndControl->TryPresentContextMenuForTarget(this);
 	}
 
-	Logging::Log("TryToPresentContextMenu failed at GetRootWindow\n");
+	ShowErrorMessageBox(
+		"Internal context menu error",
+		"Control::TryToPresentContextMenu() failed to present a context menu.");
+
 	return false;
 }
 

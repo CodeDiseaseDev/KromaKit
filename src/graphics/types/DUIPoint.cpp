@@ -3,6 +3,15 @@
 //
 
 #include <kromakit/graphics/types/DUIPoint.h>
+#include <cmath>
+
+static float SnapFloatToPixel(float value, float scaleFactor) {
+  if (scaleFactor <= 0.0f) {
+    return std::round(value);
+  }
+
+  return std::round(value * scaleFactor) / scaleFactor;
+}
 
 DUIPoint::DUIPoint(float _x, float _y) :
   x(_x), y(_y) {}
@@ -43,4 +52,16 @@ bool DUIPoint::operator==(const DUIPoint &other) const {
 
 bool DUIPoint::operator!=(const DUIPoint &other) const {
   return !(*this == other);
+}
+
+DUIPoint DUIPoint::SnapToPixel(float scaleFactor) const {
+  return {
+    SnapFloatToPixel(x, scaleFactor),
+    SnapFloatToPixel(y, scaleFactor)
+  };
+}
+
+void DUIPoint::SnapToPixelInPlace(float scaleFactor) {
+  x = SnapFloatToPixel(x, scaleFactor);
+  y = SnapFloatToPixel(y, scaleFactor);
 }

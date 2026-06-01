@@ -108,6 +108,10 @@ public:
   Control();
   virtual ~Control();
 
+  void ShowErrorMessageBox(
+    std::string title,
+    std::string message);
+
   // ---------------------------------------------------------------------------
   // Rendering / update / layout
   // ---------------------------------------------------------------------------

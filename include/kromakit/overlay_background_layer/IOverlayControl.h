@@ -14,6 +14,8 @@ class IOverlayControl :
 public:
   ~IOverlayControl() override;
 
+  virtual bool ShouldBeCentered() { return false; }
+
   virtual void OnOverlayShown(OverlayBackgroundLayer* layer);
   virtual void OnOverlayDismissed();
   virtual bool ShouldDismissOnBackgroundTap() const;

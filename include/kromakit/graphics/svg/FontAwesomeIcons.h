@@ -14,6 +14,12 @@ namespace DUIIcons::FontAwesome {
     inline constexpr std::string_view CircleExclamation =
       "icons/fontawesome/solid/circle-exclamation.svg";
 
+    inline constexpr std::string_view CircleInfo =
+      "icons/fontawesome/solid/circle-info.svg";
+
+    inline constexpr std::string_view CircleQuestion =
+      "icons/fontawesome/solid/circle-question.svg";
+
     inline constexpr std::string_view File =
       "icons/fontawesome/solid/file.svg";
 
@@ -44,12 +50,18 @@ namespace DUIIcons::FontAwesome {
     inline constexpr std::string_view Stop =
       "icons/fontawesome/solid/stop.svg";
 
+    inline constexpr std::string_view TriangleExclamation =
+      "icons/fontawesome/solid/triangle-exclamation.svg";
+
     inline constexpr std::string_view Xmark =
       "icons/fontawesome/solid/xmark.svg";
 
   }
 
   namespace Regular {
+    inline constexpr std::string_view CircleQuestion =
+      "icons/fontawesome/regular/circle-question.svg";
+
     inline constexpr std::string_view File =
       "icons/fontawesome/regular/file.svg";
 

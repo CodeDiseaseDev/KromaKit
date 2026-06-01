@@ -31,6 +31,9 @@ struct DUIPoint {
   // Equality
   bool operator==(const DUIPoint& other) const;
   bool operator!=(const DUIPoint& other) const;
+
+  DUIPoint SnapToPixel(float scaleFactor = 1.0f) const;
+  void SnapToPixelInPlace(float scaleFactor = 1.0f);
 };
 
 

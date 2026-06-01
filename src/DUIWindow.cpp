@@ -53,10 +53,10 @@ void DUIWindow::ConfigureOverlayBackgroundLayer(
 
 MessageBox* DUIWindow::ShowMessageBox(MessageBoxOptions options) {
   auto* backgroundLayer =
-    overlayStack->CreateOwnedControl<OverlayBackgroundLayer>();
+    overlayStack->CreateControl<OverlayBackgroundLayer>();
 
   auto* messageBox =
-    backgroundLayer->CreateOwnedControl<MessageBox>();
+    backgroundLayer->CreateControl<MessageBox>();
 
   messageBox->SetOptions(std::move(options));
 

@@ -11,6 +11,8 @@
 class PlatformServices {
 public:
   static std::shared_ptr<IFilePicker> FilePicker();
+
+  static void DisplayMessageBox_(std::string title, std::string message);
 };
 
 #endif //SYNTHEM_PLATFORMSERVICES_H

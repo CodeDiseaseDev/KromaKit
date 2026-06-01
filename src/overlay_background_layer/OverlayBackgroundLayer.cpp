@@ -146,7 +146,27 @@ void OverlayBackgroundLayer::OnRender(Graphics *rendTarget) {
 }
 
 void OverlayBackgroundLayer::DoLayout(
-  Graphics *renderTarget) {}
+  Graphics *renderTarget) {
+  (void)renderTarget;
+
+  for (auto* child : Children) {
+    if (auto* control = dynamic_cast<IOverlayControl*>(child)) {
+      if (control->ShouldBeCentered()) {
+        DUIPoint centered = {
+          size.width / 2 - control->size.width / 2,
+          size.height / 2 - control->size.height / 2
+        };
+        centered.SnapToPixelInPlace();
+
+        control->SetLayoutLocation(centered);
+      }
+    }
+  }
+
+  // for (auto* child : Children) {
+  //   child->SetLayoutFrame({0.0f, 0.0f}, size);
+  // }
+}
 
 void OverlayBackgroundLayer::Update(float deltaTime) {
   if (isClosing && opacity_animation.GetValue() < 0.1f) {
