@@ -17,6 +17,10 @@ public:
   void SetRows(const std::vector<LayoutLength>& value);
   void SetColumns(const std::vector<LayoutLength>& value);
 
+  void SetRowSpacing(float value);
+  void SetColumnSpacing(float value);
+  void SetSpacing(float value);
+
   std::vector<LayoutLength>& GetRows();
   std::vector<LayoutLength>& GetColumns();
 
@@ -37,6 +41,8 @@ protected:
   DUIInsets layoutPadding{};
   std::vector<LayoutLength> rows;
   std::vector<LayoutLength> columns;
+
+  float rowSpacing = 0, columnSpacing = 0;
 };
 
 

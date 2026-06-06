@@ -608,6 +608,9 @@ void ConfigureWindowIfConfigured() {
 
   [self stopDisplayTimer];
 
+  gWindow.BeginShutdown(DUIWindowCloseReason
+      ::NativeWindowClose);
+
   gRenderTargetOwner.Reset();
   self.ctx = nullptr;
 }

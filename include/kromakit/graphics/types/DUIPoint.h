@@ -34,6 +34,10 @@ struct DUIPoint {
 
   DUIPoint SnapToPixel(float scaleFactor = 1.0f) const;
   void SnapToPixelInPlace(float scaleFactor = 1.0f);
+
+  static DUIPoint Zero() {
+    return {0.0f, 0.0f};
+  }
 };
 
 

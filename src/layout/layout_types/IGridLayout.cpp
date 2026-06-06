@@ -24,6 +24,8 @@ bool IsValidChild(const LayoutItem& child)
     child.control->isVisible;
 }
 
+
+
 DUISize GetChildMeasuredSize(
   const LayoutItem& child,
   const DUISize& available)
@@ -105,14 +107,15 @@ float SumRange(
 
 std::vector<float> BuildOffsets(
   const std::vector<float>& sizes,
-  const float start)
+  const float start,
+  const float spacing)
 {
   std::vector<float> offsets(sizes.size(), start);
 
   float cursor = start;
   for (int i = 0; i < static_cast<int>(sizes.size()); ++i) {
     offsets[i] = cursor;
-    cursor += sizes[i];
+    cursor += sizes[i] + spacing;
   }
 
   return offsets;
@@ -141,6 +144,7 @@ std::vector<float> ResolveTracks(
 
     switch (track.unit) {
       case LayoutUnit::Fixed:
+      case LayoutUnit::Spacing:
         resolved[i] = ClampNonNegative(track.value);
         used += resolved[i];
         break;
@@ -330,6 +334,20 @@ DUIRect AlignChildInRect(
 }
 }
 
+void IGridLayout::SetRowSpacing(float value) {
+  rowSpacing = ClampNonNegative(value);
+}
+
+void IGridLayout::SetColumnSpacing(float value) {
+  columnSpacing = ClampNonNegative(value);
+}
+
+void IGridLayout::SetSpacing(float value) {
+  const float safeValue = ClampNonNegative(value);
+  rowSpacing = safeValue;
+  columnSpacing = safeValue;
+}
+
 void IGridLayout::SetPadding(const DUIInsets& value)
 {
   layoutPadding = value;
@@ -416,20 +434,29 @@ void IGridLayout::Arrange(
     0.0f,
     safeHeight - GetLayoutPaddingVertical(layoutPadding));
 
+  const float totalColumnSpacing =
+    std::max(0, static_cast<int>(columns.size()) - 1) * columnSpacing;
+
+  const float totalRowSpacing =
+    std::max(0, static_cast<int>(rows.size()) - 1) * rowSpacing;
+
   const std::vector<float> columnWidths = ResolveTracks(
     columns,
-    innerWidth,
+    std::max(0.0f, innerWidth - totalColumnSpacing),
     true,
     children);
 
   const std::vector<float> rowHeights = ResolveTracks(
     rows,
-    innerHeight,
+    std::max(0.0f, innerHeight - totalRowSpacing),
     false,
     children);
 
-  const std::vector<float> columnOffsets = BuildOffsets(columnWidths, innerX);
-  const std::vector<float> rowOffsets = BuildOffsets(rowHeights, innerY);
+  const std::vector<float> columnOffsets =
+    BuildOffsets(columnWidths, innerX, columnSpacing);
+
+  const std::vector<float> rowOffsets =
+    BuildOffsets(rowHeights, innerY, rowSpacing);
 
   const int columnCount = static_cast<int>(columns.size());
   const int rowCount = static_cast<int>(rows.size());
@@ -450,8 +477,13 @@ void IGridLayout::Arrange(
     const float cellX = columnOffsets[column];
     const float cellY = rowOffsets[row];
 
-    const float cellWidth = SumRange(columnWidths, column, columnSpan);
-    const float cellHeight = SumRange(rowHeights, row, rowSpan);
+    const float cellWidth =
+      SumRange(columnWidths, column, columnSpan) +
+      std::max(0, columnSpan - 1) * columnSpacing;
+
+    const float cellHeight =
+      SumRange(rowHeights, row, rowSpan) +
+      std::max(0, rowSpan - 1) * rowSpacing;
 
     const DUIRect cellRect = {
       cellX,

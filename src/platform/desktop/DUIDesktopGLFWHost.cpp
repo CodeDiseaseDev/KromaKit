@@ -316,6 +316,9 @@ void DUIDesktopGLFWHost::MainLoop() {
 }
 
 void DUIDesktopGLFWHost::Shutdown() {
+  window_.BeginShutdown(DUIWindowCloseReason
+    ::NativeWindowClose);
+
   if (config_.resetRenderTarget != nullptr) {
     config_.resetRenderTarget();
   }

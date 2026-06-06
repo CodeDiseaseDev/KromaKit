@@ -30,6 +30,8 @@
 #include <kromakit/event_types/keyboard/DUIKeyEvent.h>
 #include <kromakit/event_types/keyboard/DUITextInputEvent.h>
 
+#include "DUIWindowCloseEvent.h"
+
 
 #define DUI_DEBUG_IF_FORCE(cond)  ((cond) || true)
 #define DUI_DEBUG_IF_BYPASS(cond) ((cond) && false)
@@ -257,6 +259,8 @@ public:
     HitTestParameters parameters
   );
 
+  bool TrySelect();
+
   virtual void OnPointerMove(const PointerEvent& e);
   virtual void OnPointerDown(const PointerEvent& e);
   virtual void OnPointerUp(const PointerEvent& e);
@@ -419,6 +423,11 @@ public:
   // Control hierarchy
   // ---------------------------------------------------------------------------
 
+  void IncrementTreeVersion();
+  uint64_t GetTreeVersion();
+
+  void DetachChildrenForDestruction();
+
   template<typename T, typename... Args>
   requires std::is_base_of_v<Control, T>
   T* CreateOwnedControl(Args&&... args) {
@@ -468,6 +477,8 @@ public:
     ownedChildren.emplace_back(std::move(control));
     AttachControl(raw);
 
+    IncrementTreeVersion();
+
     return raw;
   }
 
@@ -514,6 +525,10 @@ public:
 
     Children.push_back(control);
     MarkLayoutDirty();
+    MarkRenderTreeDirty();
+    MarkRenderOrderDirty();
+
+    IncrementTreeVersion();
 
     if (hasLoaded) {
       control->InternalOnLoad();
@@ -562,6 +577,10 @@ public:
 
     Children.push_back(raw);
     MarkLayoutDirty();
+    MarkRenderTreeDirty();
+    MarkRenderOrderDirty();
+
+    IncrementTreeVersion();
 
     if (hasLoaded) {
       raw->InternalOnLoad();
@@ -574,9 +593,20 @@ public:
   virtual void OnUsed();
   virtual DUIWindow* GetRootWindow();
 
+
+
   // ---------------------------------------------------------------------------
   // Lifecycle / selection / properties
   // ---------------------------------------------------------------------------
+
+  static bool RequestWindowCloseRecursive(Control *control, const DUIWindowCloseEvent &event);
+  bool RequestWindowClose(const DUIWindowCloseEvent &event);
+
+  void NotifyWindowClosing(const DUIWindowCloseEvent &event);
+  void NotifyWindowClosingRecursive(Control *control, const DUIWindowCloseEvent &event);
+
+  virtual bool OnWindowCloseRequested(const DUIWindowCloseEvent& e);
+  virtual void OnWindowClosing(const DUIWindowCloseEvent& e);
 
   void TriggerOnWindowLoaded();
 
@@ -674,6 +704,10 @@ public:
   ScrollAxis gestureDirectionPreference = ScrollAxis::Auto;
 
   std::string sContent = "";
+
+  mutable DUIWindow* cached_window_ = nullptr;
+
+  DUIWindow* GetWindow() const;
 
 private:
   DUIStyleName styleName;

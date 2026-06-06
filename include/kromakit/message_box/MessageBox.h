@@ -7,6 +7,7 @@
 #include "MessageBoxOptions.h"
 #include "kromakit/Label.h"
 #include "kromakit/Panel.h"
+#include "kromakit/TextBlock.h"
 
 #include "kromakit/overlay_background_layer/IOverlayControl.h"
 
@@ -54,7 +55,7 @@ private:
 
   Panel* surface_ = nullptr;
   Label* titleLabel_ = nullptr;
-  Label* messageLabel_ = nullptr;
+  TextBlock* messageLabel_ = nullptr;
   Label* detailsLabel_ = nullptr;
   Button* detailsButton_ = nullptr;
 

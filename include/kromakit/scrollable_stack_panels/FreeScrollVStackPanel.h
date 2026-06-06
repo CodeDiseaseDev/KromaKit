@@ -25,6 +25,10 @@ public:
   template <typename T>
   T* AddControl(std::unique_ptr<T>) = delete;
 
+  std::optional<std::string> GetControlName() const override {
+    return "FreeScrollVStackPanel";
+  }
+
 
 protected:
   void DoLayout(Graphics* renderTarget) override;

@@ -19,6 +19,8 @@ class TextBox : public Control {
   float blinkAnimationTime = 0.0f;
   float blinkAnimValue = 0.0f;
 
+  Graphics* cachedGraphics_ = nullptr;
+
 
 public:
   std::function<void()> OnInput;
@@ -61,7 +63,13 @@ public:
   bool WantsClickCapture() const override;
   bool WantsDragCapture() const override;
 
-  float CalculateTextWidthUpToIndex(int index, Graphics *rendTarget);
+  // float CalculateTextWidthUpToIndex(int index, const std::shared_ptr<Graphics>& rendTarget);
+  float CalculateTextWidthUpToIndex(int index, Graphics* rendTarget);
+
+  void SetPlaceholderText(std::string text);
+  std::string GetPlaceholderText();
+
+  void SelectAll();
 
 private:
   static constexpr float xSideSpacing = 10.0f;
@@ -71,11 +79,14 @@ private:
 
   std::string placeholderText = "TextBox";
 
+
+
   mutable bool caretPositionsDirty = true;
   mutable std::vector<float> caretXPositions;
 
   void MarkTextMetricsDirty();
   void RebuildCaretPositions(Graphics* graphics) const;
+  void RebuildCaretPositions(std::shared_ptr<Graphics> graphics) const;
 
   bool HasSelection() const;
 
@@ -84,6 +95,8 @@ private:
   int GetSelectionEnd() const;
 
   void ClearSelection();
+
+
 
   void SetSelection(int anchor, int focus);
 

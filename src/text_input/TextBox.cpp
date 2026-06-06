@@ -35,6 +35,12 @@ void TextBox::ClearSelection() {
   selectionFocusIndex = cursorIndex;
 }
 
+void TextBox::SelectAll() {
+  if (!sContent.empty()) {
+    SetSelection(0, static_cast<int>(sContent.size()));
+  }
+}
+
 void TextBox::SetSelection(
   int anchor,
   int focus
@@ -46,6 +52,14 @@ void TextBox::SetSelection(
 
   cursorIndex = selectionFocusIndex;
   UpdateCursor();
+}
+
+void TextBox::SetPlaceholderText(std::string text) {
+  placeholderText = text;
+}
+
+std::string TextBox::GetPlaceholderText() {
+  return placeholderText;
 }
 
 void TextBox::MarkTextMetricsDirty() {
@@ -75,6 +89,10 @@ void TextBox::RebuildCaretPositions(Graphics* graphics) const {
   caretPositionsDirty = false;
 }
 
+void TextBox::RebuildCaretPositions(std::shared_ptr<Graphics> graphics) const {
+  RebuildCaretPositions(graphics.get());
+}
+
 float TextBox::CalculateTextWidthUpToIndex(
   int       index,
   Graphics* rendTarget
@@ -89,8 +107,15 @@ float TextBox::CalculateTextWidthUpToIndex(
   return caretXPositions[static_cast<size_t>(index)];
 }
 
+// float TextBox::CalculateTextWidthUpToIndex(
+//   int       index,
+//   Graphics* rendTarget
+// ) {
+//   RebuildCaretPositions(rendTarget);
+// }
+
 int TextBox::GetTextIndexAtLocalX(float localX) {
-  Graphics* graphics = GetRootWindow()->graphics;
+  std::shared_ptr<Graphics> graphics = GetRootWindow()->graphics;
 
   RebuildCaretPositions(graphics);
 
@@ -165,13 +190,16 @@ void TextBox::MoveCursorWithSelection(
 }
 
 void TextBox::UpdateCursor() {
-  cursorXPos =
-    xSideSpacing +
-    CalculateTextWidthUpToIndex(
-      cursorIndex,
-      GetRootWindow()->graphics);
+  if (cachedGraphics_ != nullptr) {
+    cursorXPos =
+      xSideSpacing +
+      CalculateTextWidthUpToIndex(
+        cursorIndex,
+        cachedGraphics_);
 
-  MarkVisualDirty();
+    MarkVisualDirty();
+  }
+
 }
 
 void TextBox::OnPointerDown(const PointerEvent& e) {
@@ -440,6 +468,8 @@ void TextBox::RenderTextBoxText(Graphics* rendTarget) {
 }
 
 void TextBox::OnRender(Graphics* rendTarget) {
+  cachedGraphics_ = rendTarget;
+
   rendTarget->FillControlBackground(this);
 
   RenderSelection(rendTarget);

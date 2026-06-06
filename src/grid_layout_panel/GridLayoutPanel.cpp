@@ -40,6 +40,14 @@ void GridLayoutPanel::SetGridPadding(const DUIInsets& value)
   MarkLayoutDirty();
 }
 
+void GridLayoutPanel::SetGridRowSpacing(float spacing) {
+  rowSpacing = spacing;
+}
+
+void GridLayoutPanel::SetGridColumnSpacing(float spacing) {
+  columnSpacing = spacing;
+}
+
 void GridLayoutPanel::RegisterLayoutChild(
   Control* control,
   const GridLayoutOptions& placement,

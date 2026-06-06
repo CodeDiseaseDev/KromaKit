@@ -22,6 +22,10 @@ public:
 
   OverlayBackgroundLayer* background_layer = nullptr;
 
+  std::optional<std::string> GetControlName() const override {
+    return "IOverlayControl";
+  }
+
 protected:
   void DismissBackgroundLayer();
 };

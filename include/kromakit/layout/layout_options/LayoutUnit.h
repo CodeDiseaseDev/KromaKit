@@ -9,7 +9,8 @@ enum class LayoutUnit {
   Auto,
   Fixed,
   Fill,
-  Percent
+  Percent,
+  Spacing
 };
 
 #endif //TEST_IOS_APP_LAYOUTUNIT_H

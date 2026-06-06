@@ -54,11 +54,16 @@ void Label::OnRender(Graphics* rendTarget)
 
 	rendTarget->FillControlBackground(this);
 
+	float x = 0;
+	float y = 0;
+
+	if (!disableAutoTextPlacement) {
+		y = this->size.height / 2 - cachedSize.height / 2;
+	}
 
 	(void)rendTarget->RenderText(
 		sContent.c_str(), font, foreground,
-		0,
-		this->size.height / 2 - cachedSize.height / 2
+		x,y
 	);
 
 }

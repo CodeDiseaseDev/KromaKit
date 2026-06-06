@@ -86,6 +86,7 @@ void Control::SetContent(std::string wStr)
 
 	sContent = wStr;
 	MarkLayoutDirty();
+	MarkVisualDirty();
 }
 
 void Control::SetSize(float w, float h)

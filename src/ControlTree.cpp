@@ -21,8 +21,68 @@ DUIWindow* Control::GetRootWindow()
 	return parent->GetRootWindow();
 }
 
-void Control::TriggerOnWindowLoaded()
-{
+bool Control::RequestWindowClose(const DUIWindowCloseEvent& event) {
+	auto* rootControl = GetRootWindow();
+
+	if (rootControl == nullptr) {
+		return false;
+	}
+
+	return RequestWindowCloseRecursive(rootControl, event);
+}
+
+bool Control::RequestWindowCloseRecursive(
+	Control* control,
+	const DUIWindowCloseEvent& event
+) {
+	if (control == nullptr) {
+		return false;
+	}
+
+	if (control->OnWindowCloseRequested(event)) {
+		return true;
+	}
+
+	for (auto* child : control->Children) {
+		if (RequestWindowCloseRecursive(child, event)) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
+void Control::NotifyWindowClosing(const DUIWindowCloseEvent& event) {
+	auto* rootControl = GetRootWindow();
+
+	if (rootControl == nullptr) {
+		return;
+	}
+
+	NotifyWindowClosingRecursive(rootControl, event);
+}
+
+void Control::NotifyWindowClosingRecursive(
+	Control* control,
+	const DUIWindowCloseEvent& event
+) {
+	if (control == nullptr) {
+		return;
+	}
+
+	control->OnWindowClosing(event);
+
+	for (auto* child : control->Children) {
+		NotifyWindowClosingRecursive(child, event);
+	}
+}
+
+void Control::OnWindowClosing(const DUIWindowCloseEvent &e) {}
+bool Control::OnWindowCloseRequested(const DUIWindowCloseEvent &e) {
+	return false;
+}
+
+void Control::TriggerOnWindowLoaded() {
 	for (auto i = Children.rbegin();
 		i != Children.rend(); i++)
 	{
@@ -34,8 +94,7 @@ void Control::TriggerOnWindowLoaded()
 	OnLoad();
 }
 
-void Control::RemoveControl(Control* control)
-{
+void Control::RemoveControl(Control* control) {
 	if (control == nullptr)
 		return;
 
@@ -80,11 +139,14 @@ void Control::RemoveControl(Control* control)
 	if (removedAny) {
 		MarkLayoutDirty();
 		MarkVisualDirty();
+		MarkRenderTreeDirty();
+		MarkRenderOrderDirty();
+
+		IncrementTreeVersion();
 	}
 }
 
-void Control::ClearControls()
-{
+void Control::ClearControls() {
 	for (auto& ctrl : Children)
 	{
 		if (ctrl != nullptr &&
@@ -109,6 +171,10 @@ void Control::ClearControls()
 	ownedChildren.clear();
 	MarkLayoutDirty();
 	MarkVisualDirty();
+	MarkRenderTreeDirty();
+	MarkRenderOrderDirty();
+
+	IncrementTreeVersion();
 }
 
 void Control::AssignOwnID()

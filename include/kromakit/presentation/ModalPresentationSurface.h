@@ -33,8 +33,8 @@ public:
 
 private:
   // Modal+overlay UI controls owned by this adapter. Presented content remains borrowed.
-  std::unique_ptr<SurfaceModalPresentation> modal_;
   std::unique_ptr<OverlayBackgroundLayer> overlayLayer_;
+  std::unique_ptr<SurfaceModalPresentation> modal_;
 
   // Non-owning environment references provided by Attach().
   DUIWindow* window_ = nullptr;

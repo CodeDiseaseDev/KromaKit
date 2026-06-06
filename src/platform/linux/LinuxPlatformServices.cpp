@@ -6,6 +6,7 @@
 
 #include <kromakit/platform/PlatformServices.h>
 #include <kromakit/platform/linux/LinuxFilePicker.h>
+#include <kromakit/platform/linux/LinuxMainThreadDispatcher.h>
 
 #include <memory>
 
@@ -44,6 +45,30 @@ namespace {
 
     return WIFEXITED(status) && WEXITSTATUS(status) == 0;
   }
+}
+
+std::shared_ptr<IMainThreadDispatcher>
+PlatformServices::MainThreadDispatcher() {
+  static std::shared_ptr<IMainThreadDispatcher> dispatcher =
+    std::make_shared<LinuxMainThreadDispatcher>();
+
+  return dispatcher;
+}
+
+void PlatformServices::PostToMainThread(
+  std::function<void()> action
+) {
+  MainThreadDispatcher()->Post(std::move(action));
+}
+
+void PlatformServices::DispatchOrRunOnMainThread(
+  std::function<void()> action
+) {
+  MainThreadDispatcher()->DispatchOrRun(std::move(action));
+}
+
+void PlatformServices::DrainMainThreadTasks() {
+  MainThreadDispatcher()->Drain();
 }
 
 void PlatformServices::DisplayMessageBox_(

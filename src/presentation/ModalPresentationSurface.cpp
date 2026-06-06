@@ -19,10 +19,32 @@ public:
       onOverlayDismissedHook();
     }
   }
+
+  std::optional<std::string> GetControlName() const override {
+    return "SurfaceModalPresentation";
+  }
 };
 
 ModalPresentationSurface::ModalPresentationSurface() = default;
-ModalPresentationSurface::~ModalPresentationSurface() = default;
+ModalPresentationSurface::~ModalPresentationSurface() {
+  ClearBorrowedContentIfAttached();
+
+  if (overlayLayer_ != nullptr &&
+      overlayLayer_->parent != nullptr) {
+    overlayLayer_->parent->RemoveControl(overlayLayer_.get());
+  }
+
+  window_ = nullptr;
+  overlayStack_ = nullptr;
+
+  if (modal_ != nullptr) {
+    modal_->onOverlayDismissedHook = nullptr;
+  }
+
+  // Destroy modal content while its parent overlay layer is still alive.
+  modal_.reset();
+  overlayLayer_.reset();
+}
 
 PresentationStyle ModalPresentationSurface::GetStyle() const {
   return PresentationStyle::Modal;

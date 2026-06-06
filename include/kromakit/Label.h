@@ -11,7 +11,7 @@ public:
 	Label();
 	Label(std::string str);
 
-
+	bool disableAutoTextPlacement = false;
 
 	bool autoHeight = true;
 	bool autoWidth = true;

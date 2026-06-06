@@ -1,10 +1,11 @@
-#if defined(__APPLE__) && defined(TARGET_OS_IPHONE)
 
 #import <UIKit/UIKit.h>
 
 
 #include <kromakit/platform/PlatformServices.h>
 #include <kromakit/platform/NullFilePicker.h>
+#include <kromakit/platform/PlatformServices.h>
+#include <kromakit/platform/apple/AppleMainThreadDispatcher.h>
 
 #include <memory>
 
@@ -74,4 +75,28 @@ std::shared_ptr<IFilePicker> PlatformServices::FilePicker() {
 }
 
 
-#endif
+
+std::shared_ptr<IMainThreadDispatcher>
+PlatformServices::MainThreadDispatcher() {
+  static std::shared_ptr<IMainThreadDispatcher> dispatcher =
+    std::make_shared<AppleMainThreadDispatcher>();
+
+  return dispatcher;
+}
+
+void PlatformServices::PostToMainThread(
+  std::function<void()> action
+) {
+  MainThreadDispatcher()->Post(std::move(action));
+}
+
+void PlatformServices::DispatchOrRunOnMainThread(
+  std::function<void()> action
+) {
+  MainThreadDispatcher()->DispatchOrRun(std::move(action));
+}
+
+void PlatformServices::DrainMainThreadTasks() {
+  MainThreadDispatcher()->Drain();
+}
+

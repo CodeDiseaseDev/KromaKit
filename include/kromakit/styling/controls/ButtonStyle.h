@@ -8,7 +8,7 @@
 
 namespace DUIDefaultStyles::ButtonStyles {
 inline const DUIStyleName Default = "button.default";
-// inline const DUIStyleName Primary = "button.primary";
+inline const DUIStyleName Primary = "button.primary";
 inline const DUIStyleName TextAction = "button.text.action";
 
 inline void Register() {
@@ -22,6 +22,15 @@ inline void Register() {
     b.UseStyle(ForegroundBaseStyles::Primary);
 
     b.hoverBackground = Lighten(b.background, -10);
+  });
+
+  DUIStyleRegistry::Register<Button>(Primary, [](Button& b) {
+    b.UseStyle(Default);
+
+    b.background = Colors::SuccessA0;
+    b.hoverBackground = Lighten(Colors::SuccessA0, -30);
+
+    // b.foreground
   });
 
   DUIStyleRegistry::Register<Button>(TextAction, [](Button& b) {

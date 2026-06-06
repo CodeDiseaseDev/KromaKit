@@ -9,7 +9,27 @@
 #include <kromakit/presentation/FloatingWindowControl.h>
 
 FloatingWindowSurface::FloatingWindowSurface() = default;
-FloatingWindowSurface::~FloatingWindowSurface() = default;
+FloatingWindowSurface::~FloatingWindowSurface() {
+  ClearBorrowedContentIfAttached();
+
+  if (overlayLayer_ != nullptr &&
+      overlayLayer_->parent != nullptr) {
+    overlayLayer_->parent->RemoveControl(overlayLayer_.get());
+  }
+
+  window_ = nullptr;
+  overlayStack_ = nullptr;
+
+  if (windowControl_ != nullptr) {
+    windowControl_->OnCloseRequested = nullptr;
+    windowControl_->OnOverlayDismissedHook = nullptr;
+    windowControl_->OnRequestTopMost = nullptr;
+  }
+
+  // Destroy the floating window while its parent overlay layer is still alive.
+  windowControl_.reset();
+  overlayLayer_.reset();
+}
 
 PresentationStyle FloatingWindowSurface::GetStyle() const {
   return PresentationStyle::FloatingWindow;

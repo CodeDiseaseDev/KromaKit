@@ -73,12 +73,24 @@ private:
 	// RootStackCoordinator manages the "zoom out" effect of the `ContentStack`
 	RootStackCoordinator rootStackCoordinator;
 
+	uint64_t controlTreeVersion = 0;
+
+
 public:
 	OverlayStack* GetOverlayStack() {
 		return overlayStack;
 	}
 	ContentStack* GetContentStack() {
 		return contentStack;
+	}
+
+
+
+	uint64_t GetControlTreeVersion() const {
+		return controlTreeVersion;
+	}
+	void IncrementControlTreeVersion() {
+		controlTreeVersion++;
 	}
 
 	template <typename TOverlay, typename... TArgs>
@@ -89,7 +101,7 @@ public:
 		);
 
 		auto* backgroundLayer =
-			overlayStack->CreateOwnedControl<OverlayBackgroundLayer>();
+			overlayStack->CreateControl<OverlayBackgroundLayer>();
 
 		auto* overlayControl =
 			backgroundLayer->CreateOwnedControl<TOverlay>(
@@ -155,6 +167,19 @@ public:
 
 
 
+	bool RequestClose(DUIWindowCloseReason reason);
+
+	void ClearPointerState();
+	void ClearHoverState();
+	void ClearPressedState();
+	void ClearCaptureState();
+	void DismissAllOverlays();
+	void DismissContextMenus();
+	void DetachPresentationHosts();
+
+	void BeginShutdown(DUIWindowCloseReason reason);
+
+
 
 	void MarkRenderTreeDirty();
 	void MarkRenderOrderDirty();
@@ -175,7 +200,7 @@ public:
 
 	DUIInsets safeArea {};
 
-	Graphics* graphics = nullptr;
+	std::shared_ptr<Graphics> graphics = nullptr;
 
 	DUIPlatformWindowHandle window = nullptr;
 
@@ -196,11 +221,14 @@ public:
 	DUIPoint totalDelta = { 0, 0 };
   std::shared_ptr<ContextMenu> activeHoldContextMenu = nullptr;
   std::unique_ptr<OverlayBackgroundLayer> activeHoldContextMenuLayer = nullptr;
+
 	std::unique_ptr<RenderPipeline> renderPipeline;
 
 	// MessageBoxCtrl* msgBox = nullptr;
 
 	// DeveloperTools* devtools_inst = nullptr;
+
+	bool RequestControlSelection(Control* ctrl);
 
 	DUIPoint cursorLocation = { 0, 0 };
 	MouseButton activeMouseButton = MouseButton::None;
@@ -316,4 +344,17 @@ public:
 	void OnRender(Graphics* rendTarget) override;
 	void DoLayout(Graphics* renderTarget) override;
 	bool NeedsLayoutWhenOwnSizeChanges() const override { return true; }
+
+
+
+
+
+
+
+
+
+
+private:
+	bool isShuttingDown_ = false;
+	bool closeRequested_ = false;
 };

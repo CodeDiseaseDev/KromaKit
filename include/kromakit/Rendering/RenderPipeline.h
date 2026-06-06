@@ -14,6 +14,8 @@ public:
 
 	void RenderWindow(DUIWindow* window, float deltaTime);
 
+	void Reset();
+
 private:
 	void ConfigureGraphicsState(DUIWindow* window, Graphics* graphics, float deltaTime) const;
 	void BuildRenderLists(DUIWindow* window, Graphics* graphics);

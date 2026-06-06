@@ -7,6 +7,7 @@
 
 #include <cstdio>
 #include <string>
+#include <vector>
 #include <kromakit/Logging.h>
 
 // struct Platform;
@@ -39,6 +40,8 @@ struct Platform {
   bool hasKeyboard = true;
   bool hasPen = false;
   bool hasHaptics = false;
+
+  std::vector<std::string> startupArguments;
 
   FormFactor formFactor = FormFactor::Desktop;
   OS os = OS::Unknown;

@@ -104,6 +104,105 @@ MessageBox* DUIWindow::ShowConfirm(
   ));
 }
 
+bool DUIWindow::RequestClose(DUIWindowCloseReason reason) {
+  if (isShuttingDown_) {
+    return true;
+  }
+
+  DUIWindowCloseEvent event;
+  event.reason = reason;
+
+  const bool canceledByControls =
+    RequestWindowClose(event);
+
+  if (event.cancel || canceledByControls) {
+    return false;
+  }
+
+  BeginShutdown(reason);
+  return true;
+}
+
+void DUIWindow::ClearPointerState() {
+  cursorLocation = DUIPoint::Zero();
+  activeMouseButton = MouseButton::None;
+}
+
+void DUIWindow::ClearHoverState() {
+  hoverControl = nullptr;
+
+}
+
+void DUIWindow::ClearPressedState() {
+  mouseHeldControl = nullptr;
+  selectedControl = nullptr;
+  gestureStartControl = nullptr;
+  activeGestureOwner = nullptr;
+  activeContextMenuHoldTarget = nullptr;
+  activeHoldContextMenu = nullptr;
+  activeHoldContextMenuLayer = nullptr;
+
+  activeGestureIsDrag = false;
+  contextMenuHoldFired = false;
+
+  contextMenuHoldStartPoint = DUIPoint::Zero();
+  gestureStartPoint = DUIPoint::Zero();
+  gestureCurrentPoint = DUIPoint::Zero();
+  totalDelta = DUIPoint::Zero();
+
+  gestureLock = GestureDirection::None;
+
+
+}
+
+void DUIWindow::ClearCaptureState() {
+  // ...
+}
+
+void DUIWindow::DismissAllOverlays() {
+}
+
+void DUIWindow::DismissContextMenus() {
+}
+
+void DUIWindow::DetachPresentationHosts() {
+}
+
+void DUIWindow::BeginShutdown(DUIWindowCloseReason reason) {
+  if (isShuttingDown_) {
+    return;
+  }
+
+  isShuttingDown_ = true;
+
+  DUIWindowCloseEvent event;
+  event.reason = reason;
+
+  // App/root cleanup happens while UI/audio refs still exist.
+  NotifyWindowClosing(event);
+
+  // Stop interaction before graphics/window teardown.
+  ClearHoverState();
+  ClearPressedState();
+  ClearCaptureState();
+
+  // Kill overlays/popups/tooltips/presentation hosts.
+  DismissAllOverlays();
+  DismissContextMenus();
+  DetachPresentationHosts();
+
+  // Stop rendering into the native target.
+  if (renderPipeline != nullptr) {
+    renderPipeline->Reset();
+  }
+
+  // Detach roots without normal invalidation; the window is already closing.
+  DetachChildrenForDestruction();
+  graphics = nullptr;
+
+  closeRequested_ = true;
+}
+
 void DUIWindow::MarkRenderTreeDirty() {
   rendInvalidation.Modify([&](RenderInvalidationState& ris) {
     ++ris.renderTreeVersion;
@@ -268,19 +367,33 @@ void DUIWindow::UpdateContextMenuHoldState() {
   (void)TryPresentContextMenuForTarget(activeContextMenuHoldTarget);
 }
 
+bool DUIWindow::RequestControlSelection(Control *ctrl) {
+  if (ctrl == nullptr ||
+      ctrl->GetWindow() != this) {
+
+    // control does NOT belong to this window
+    // (or is null)
+    return false;
+  }
+
+  SetSelectedControl(ctrl);
+  return true;
+}
+
 void DUIWindow::create_render_target(NVGcontext* renderTarget)
 {
-    if (graphics != nullptr) {
-        delete graphics;
-        graphics = nullptr;
-    }
+  if (graphics != nullptr) {
+      // delete graphics;
+      graphics = nullptr;
+  }
 
-    if (renderTarget == nullptr) {
-        Logging::Log("Could not init nanovg.\n");
-        return;
-    }
+  if (renderTarget == nullptr) {
+      Logging::Log("Could not init nanovg.\n");
+      return;
+  }
 
-    graphics = new Graphics(renderTarget);
+  graphics = std::make_shared<Graphics>(renderTarget);
+
 	if (!renderPipeline) {
 		renderPipeline = std::make_unique<RenderPipeline>();
 	}
@@ -297,7 +410,7 @@ const std::vector<std::string> DUIWindow::GetDebugOverlayItems() {
 
 DUIWindow::~DUIWindow() {
   if (graphics != nullptr) {
-    delete graphics;
+    // delete graphics;
     graphics = nullptr;
   }
   // nvgDeleteGLES2();

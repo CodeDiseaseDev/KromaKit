@@ -969,6 +969,25 @@ void Control::PrintDebugTree() {
 	PrintDebugTreeRecursive("", true, true);
 }
 
+DUIWindow* Control::GetWindow() const {
+	if (cached_window_ != nullptr) {
+		return cached_window_;
+	}
+
+	const Control* top = this;
+
+	while (top != nullptr &&
+				 top->parent != nullptr) {
+
+		top = top->parent;
+	}
+
+	auto* window = dynamic_cast<DUIWindow*>(const_cast<Control*>(top));
+
+	cached_window_ = window;
+	return cached_window_;
+}
+
 void Control::PrintDebugTreeRecursive(
 	const std::string &prefix, bool isLast, bool isRoot) {
 
@@ -1343,6 +1362,59 @@ void Control::StretchInParent(
 	}
 }
 
+void Control::IncrementTreeVersion() {
+	if (auto window = GetWindow()) {
+		window->IncrementControlTreeVersion();
+	}
+}
+
+uint64_t Control::GetTreeVersion() {
+	if (auto window = GetWindow()) {
+		return window->GetControlTreeVersion();
+	}
+	return 0;
+}
+
+void Control::DetachChildrenForDestruction() {
+	for (auto* child : Children) {
+		if (child == nullptr) {
+			continue;
+		}
+
+		if (child->owner == this) {
+			child->DetachChildrenForDestruction();
+			child->owner = nullptr;
+		}
+
+		if (child->parent == this) {
+			child->parent = nullptr;
+		}
+
+		child->cached_window_ = nullptr;
+	}
+
+	for (auto& child : ownedChildren) {
+		if (child == nullptr) {
+			continue;
+		}
+
+		if (child->owner == this) {
+			child->DetachChildrenForDestruction();
+			child->owner = nullptr;
+		}
+
+		if (child->parent == this) {
+			child->parent = nullptr;
+		}
+
+		child->cached_window_ = nullptr;
+	}
+
+	Children.clear();
+	ownedChildren.clear();
+	cached_window_ = nullptr;
+}
+
 Control* Control::HitTestAt(
 	int x, int y,
 	DUIPoint& relativePos,
@@ -1387,4 +1459,14 @@ Control* Control::HitTestAt(
 		return nullptr;
 
 	return this;
+}
+
+bool Control::TrySelect() {
+	if (const auto window = GetWindow();
+			window != nullptr) {
+
+		return window->RequestControlSelection(this);
+	}
+
+	return false;
 }

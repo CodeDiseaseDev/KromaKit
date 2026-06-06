@@ -19,6 +19,12 @@ public:
     std::vector<std::string> allowedExtensions,
     std::function<void(std::optional<std::string>)> onResult
   ) = 0;
+
+  virtual void PickSaveFile(
+    std::vector<std::string> allowedExtensions,
+    std::string defaultFileName,
+    std::function<void(std::optional<std::string>)> onResult
+  ) = 0;
 };
 
 #endif //SYNTHEM_IFILEPICKER_H

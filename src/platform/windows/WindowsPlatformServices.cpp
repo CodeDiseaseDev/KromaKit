@@ -2,12 +2,17 @@
 // Created by code on 5/30/26.
 //
 
+
+
 #ifdef _WIN32
 #include <kromakit/platform/PlatformServices.h>
 #include <kromakit/platform/NullFilePicker.h>
 
 #include <memory>
-#include "PlatformServices.h"
+
+#include <kromakit/platform/PlatformProvider.h>
+#include <kromakit/platform/windows/WindowsFilePicker.h>
+#include <kromakit/platform/windows/WindowsMainThreadDispatcher.h>
 
 #include <windows.h>
 #include <string>
@@ -42,10 +47,11 @@ namespace {
 
     return result;
   }
+}
 
 std::shared_ptr<IFilePicker> PlatformServices::FilePicker() {
   static std::shared_ptr<IFilePicker> picker =
-    std::make_shared<NullFilePicker>();
+    std::make_shared<WindowsFilePicker>();
 
   return picker;
 }
@@ -63,5 +69,32 @@ void PlatformServices::DisplayMessageBox_(
     wideTitle.c_str(),
     MB_OK | MB_ICONINFORMATION | MB_SETFOREGROUND);
 }
+
+
+
+std::shared_ptr<IMainThreadDispatcher>
+PlatformServices::MainThreadDispatcher() {
+  static std::shared_ptr<IMainThreadDispatcher> dispatcher =
+    std::make_shared<WindowsMainThreadDispatcher>();
+
+  return dispatcher;
+}
+
+void PlatformServices::PostToMainThread(
+  std::function<void()> action
+) {
+  MainThreadDispatcher()->Post(std::move(action));
+}
+
+void PlatformServices::DispatchOrRunOnMainThread(
+  std::function<void()> action
+) {
+  MainThreadDispatcher()->DispatchOrRun(std::move(action));
+}
+
+void PlatformServices::DrainMainThreadTasks() {
+  MainThreadDispatcher()->Drain();
+}
+
 
 #endif

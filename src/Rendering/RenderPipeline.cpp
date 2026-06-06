@@ -66,7 +66,7 @@ void RenderPipeline::RenderWindow(DUIWindow* window, float deltaTime)
 	if (window == nullptr || window->graphics == nullptr)
 		return;
 
-	Graphics* graphics = window->graphics;
+	Graphics* graphics = window->graphics.get();
 	ConfigureGraphicsState(window, graphics, deltaTime);
 	BuildRenderLists(window, graphics);
 
@@ -78,6 +78,10 @@ void RenderPipeline::RenderWindow(DUIWindow* window, float deltaTime)
 	}
 
 	ExecuteOnscreenPass(window, graphics, needsBackdropBlur);
+}
+
+void RenderPipeline::Reset() {
+	cache_.ClearFrameLists();
 }
 
 void RenderPipeline::ConfigureGraphicsState(

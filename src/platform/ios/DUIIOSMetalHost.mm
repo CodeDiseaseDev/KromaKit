@@ -653,6 +653,9 @@ didFinishLaunchingWithOptions:(NSDictionary*)launchOptions {
 
   [self stopDisplayLink];
 
+  gWindow.BeginShutdown(DUIWindowCloseReason
+    ::NativeWindowClose);
+
   gRenderTargetOwner.Reset();
   self.ctx = nullptr;
 }

@@ -32,8 +32,8 @@ public:
 
 private:
   // Floating-window UI controls owned by this adapter. Presented content remains borrowed.
-  std::unique_ptr<FloatingWindowControl> windowControl_;
   std::unique_ptr<OverlayBackgroundLayer> overlayLayer_;
+  std::unique_ptr<FloatingWindowControl> windowControl_;
 
   // Non-owning environment references provided by Attach().
   DUIWindow* window_ = nullptr;

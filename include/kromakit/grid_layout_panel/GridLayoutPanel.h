@@ -45,6 +45,9 @@ public:
   std::optional<std::string> GetControlName() const override { return "GridLayoutPanel"; }
   const std::vector<std::string> GetDebugOverlayItems() override { return{}; }
 
+  void SetGridRowSpacing(float spacing);
+  void SetGridColumnSpacing(float spacing);
+
 private:
   void RegisterLayoutChild(
     Control* control,

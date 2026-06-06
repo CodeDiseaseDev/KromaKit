@@ -228,12 +228,14 @@ void MessageBox::BuildUI() {
   titleLabel_->autoHeight = false;
   titleLabel_->font.FontSize = 20;
   titleLabel_->font.Weight = FontWeight::Bold;
+  titleLabel_->disableAutoTextPlacement = true;
 
-  messageLabel_ = layoutGrid_->CreateLayoutChild<Label>(
+  messageLabel_ = layoutGrid_->CreateLayoutChild<TextBlock>(
     GridLayoutOptions{ContentColumn, 2, 1, 1});
   messageLabel_->SetContent(options_.message);
-  messageLabel_->autoWidth = false;
+  // messageLabel_->autoWidth = false;
   messageLabel_->autoHeight = false;
+  // messageLabel_->disableAutoTextPlacement = true;
 
   if (hasDetails) {
     detailsButton_ = layoutGrid_->CreateLayoutChild<Button>(
@@ -252,6 +254,7 @@ void MessageBox::BuildUI() {
     detailsLabel_->SetContent(options_.details);
     detailsLabel_->autoWidth = false;
     detailsLabel_->autoHeight = false;
+    detailsLabel_->disableAutoTextPlacement = true;
     detailsLabel_->isVisible = detailsVisible_;
   }
 
