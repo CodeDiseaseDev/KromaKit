@@ -27,7 +27,7 @@ REMOTE_SCRIPT="$REMOTE_ROOT/sign-on-mac.sh"
 
 # Optional overrides.
 # Empty MOBILEPROVISION means the Mac-side script will auto-find one.
-SIGN_IDENTITY="Apple Development: happyfone579@gmail.com (DRFXG2PL28)"
+SIGN_IDENTITY="Apple Development: xxx@xxx.com (XXXXXXXXXX)"
 MOBILEPROVISION="/Users/code/Library/Developer/Xcode/UserData/Provisioning Profiles/3636d537-fb89-42c9-b350-5faccc8e3248.mobileprovision"
 ENTITLEMENTS_FILE="${ENTITLEMENTS_FILE:-}"
 
